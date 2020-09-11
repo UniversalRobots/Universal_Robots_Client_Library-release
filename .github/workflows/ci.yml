@@ -1,0 +1,48 @@
+name: Integration tests
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env:
+          - DOCKER_RUN_OPTS: --network static_test_net
+            BEFORE_INIT: 'apt-get update -qq && apt-get install -y iproute2 iputils-ping && ip addr && ping -c5 192.168.56.101'
+            CTEST_OUTPUT_ON_FAILURE: 1
+            URSIM_VERSION: 3.14.1.1031110
+          - DOCKER_RUN_OPTS: --network static_test_net
+            BEFORE_INIT: 'apt-get update -qq && apt-get install -y iproute2 iputils-ping && ip addr && ping -c5 192.168.56.101'
+            CTEST_OUTPUT_ON_FAILURE: 1
+            URSIM_VERSION: 5.8.0.10253
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: start ursim
+        run: |
+          tests/resources/dockerursim/build_and_run_docker_ursim.sh $URSIM_VERSION
+        env: ${{matrix.env}}
+      - name: install gtest
+        run: sudo apt-get install -y libgtest-dev
+      - name: configure
+        run: mkdir build && cd build && cmake .. -DBoost_INCLUDE_DIR=$BOOST_ROOT_1_72_0/include -DBUILDING_TESTS=1 -DINTEGRATION_TESTS=1
+      - name: build
+        run: cmake --build build --config Debug
+      - name: test
+        run: cd build && make test
+
+  check_links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check URLs
+        run: |
+          .github/helpers/check_urls.sh -r \
+            --exclude-dir=.git \
+            --exclude-dir=build/ \
+            --exclude-dir=tests \
+            --exclude=package.xml \
+            --exclude-dir=CMakeModules \
+            --exclude=tcp_socket.cpp \
+            --exclude=real_time.md
+
