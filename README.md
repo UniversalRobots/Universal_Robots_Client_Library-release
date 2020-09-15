@@ -96,6 +96,20 @@ add_executable(db_client main.cpp)
 target_link_libraries(db_client ur_client_library::urcl)
 ```
 
+## License
+The majority of this library is licensed under the Apache-2.0 licensed. However, certain parts are
+licensed under different licenses:
+ - The queue used inside the communication structures is originally written by Cameron Desrochers
+   and is released under the BSD-2-Clause license.
+ - The semaphore implementation used inside the queue implementation is written by Jeff Preshing and
+   licensed under the zlib license
+ - The Dockerfile used for the integration tests of this repository is originally written by Arran
+   Hobson Sayers and released under the MIT license
+
+While the main `LICENSE` file in this repository contains the Apache-2.0 license used for the
+majority of the work, the respective libraries of third-party components reside together with the
+code imported from those third parties.
+
 ## Library contents
 Currently, this library contains the following components:
  * **Basic primary interface:** The primary interface isn't fully implemented at the current state
@@ -280,7 +294,7 @@ statements.
 
 These logging macros will either be translated into `printf` statements or logging commands of
 [`console_bridge`](https://github.com/ros/console_bridge) if `console_bridge` is found on the system
-during the cmake run. In this case, the define `ROS_BUILD` will be set.When built inside a catkin
+during the cmake run. In this case, the define `ROS_BUILD` will be set. When built inside a catkin
 workspace, logging commands are automatically translated into ROS logging commands.
 
 Whenever you compile this library against `console_bridge`, make sure to set the logging level in
