@@ -1,7 +1,0 @@
-ros-melodic-ur-client-library (0.1.0-1bionic) bionic; urgency=high
-
-  * initial standalone release
-
- -- Felix Exner <exner@fzi.de>  Thu, 10 Sep 2020 22:00:00 -0000
-
-
