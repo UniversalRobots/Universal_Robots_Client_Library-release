@@ -1,3 +1,26 @@
+## ur_client_library (melodic) - 0.2.2-1
+
+The packages in the `ur_client_library` repository were released into the `melodic` distro by running `/home/mauch/.local/bin/bloom-release ur_client_library --rosdistro melodic` on `Mon, 31 May 2021 10:13:50 -0000`
+
+The `ur_client_library` package was released.
+
+Version of package(s) in repository `ur_client_library`:
+
+- upstream repository: https://github.com/UniversalRobots/Universal_Robots_Client_Library
+- release repository: https://github.com/UniversalRobots/Universal_Robots_Client_Library-release.git
+- rosdistro version: `0.2.0-1`
+- old version: `0.2.0-1`
+- new version: `0.2.2-1`
+
+Versions of tools used:
+
+- bloom version: `0.10.7`
+- catkin_pkg version: `0.4.23`
+- rosdep version: `0.20.1`
+- rosdistro version: `0.8.3`
+- vcstools version: `0.1.42`
+
+
 ## ur_client_library (foxy) - 0.2.1-1
 
 The packages in the `ur_client_library` repository were released into the `foxy` distro by running `/home/mauch/.local/bin/bloom-release --rosdistro foxy --track foxy ur_client_library --edit` on `Thu, 06 May 2021 15:00:18 -0000`
