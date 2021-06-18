@@ -1,0 +1,13 @@
+Source: ros-foxy-ur-client-library
+Section: misc
+Priority: optional
+Maintainer: Felix Exner <exner@fzi.de>
+Build-Depends: debhelper (>= 9.0.0), cmake, libconsole-bridge-dev, ros-foxy-ros-workspace
+Homepage: http://wiki.ros.org/ur_client_library
+Standards-Version: 3.9.2
+
+Package: ros-foxy-ur-client-library
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libconsole-bridge-dev, ros-foxy-ament-cmake, ros-foxy-ros-workspace
+Description: Standalone C++ library for accessing Universal Robots interfaces.
+ This has been forked off the ur_robot_driver.
