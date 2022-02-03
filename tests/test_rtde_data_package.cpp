@@ -1,7 +1,7 @@
 // this is for emacs file handling -*- mode: c++; indent-tabs-mode: nil -*-
 
 // -- BEGIN LICENSE BLOCK ----------------------------------------------
-// Copyright 2019 FZI Forschungszentrum Informatik
+// Copyright 2020 FZI Forschungszentrum Informatik
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,39 +19,45 @@
 //----------------------------------------------------------------------
 /*!\file
  *
- * \author  Tristan Schnell schnell@fzi.de
- * \date    2019-04-09
+ * \author  Felix Exner mauch@fzi.de
+ * \date    2020-09-11
  *
  */
 //----------------------------------------------------------------------
 
-#include "ur_client_library/rtde/request_protocol_version.h"
+#include <gtest/gtest.h>
 
-namespace urcl
-{
-namespace rtde_interface
-{
-bool RequestProtocolVersion::parseWith(comm::BinParser& bp)
-{
-  bp.parse(accepted_);
+#include <ur_client_library/rtde/data_package.h>
 
-  return true;
+using namespace urcl;
+
+TEST(rtde_data_package, serialize_pkg)
+{
+  std::vector<std::string> recipe{ "speed_slider_mask" };
+  rtde_interface::DataPackage package(recipe);
+  package.initEmpty();
+
+  uint32_t value = 1;
+  package.setData("speed_slider_mask", value);
+
+  uint8_t buffer[4096];
+  package.setRecipeID(1);
+  size_t size = package.serializePackage(buffer);
+
+  EXPECT_EQ(size, 8);
+
+  uint8_t expected[] = { 0x0, 0x08, 0x55, 0x01, 0x00, 0x00, 0x00, 0x01 };
+  std::cout << "Serialized buffer: " << std::endl;
+  for (size_t i = 0; i < size; ++i)
+  {
+    EXPECT_EQ(buffer[i], expected[i]);
+  }
+  std::cout << std::endl;
 }
-std::string RequestProtocolVersion::toString() const
+
+int main(int argc, char* argv[])
 {
-  std::stringstream ss;
-  ss << "accepted: " << static_cast<int>(accepted_);
-  return ss.str();
+  ::testing::InitGoogleTest(&argc, argv);
+
+  return RUN_ALL_TESTS();
 }
-
-size_t RequestProtocolVersionRequest::generateSerializedRequest(uint8_t* buffer, uint16_t version)
-{
-  size_t size = 0;
-  size += PackageHeader::serializeHeader(buffer, PackageType::RTDE_REQUEST_PROTOCOL_VERSION, PAYLOAD_SIZE);
-
-  size += comm::PackageSerializer::serialize(buffer + size, version);
-
-  return size;
-}
-}  // namespace rtde_interface
-}  // namespace urcl
