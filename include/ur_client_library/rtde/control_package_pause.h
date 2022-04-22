@@ -2,6 +2,7 @@
 
 // -- BEGIN LICENSE BLOCK ----------------------------------------------
 // Copyright 2019 FZI Forschungszentrum Informatik
+// Created on behalf of Universal Robots A/S
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -81,6 +82,18 @@ public:
   {
   }
   virtual ~ControlPackagePauseRequest() = default;
+
+  /*!
+   * \brief Generates a serialized package.
+   *
+   * \param buffer Buffer to fill with the serialization
+   *
+   * \returns The total size of the serialized package
+   */
+  static size_t generateSerializedRequest(uint8_t* buffer);
+
+private:
+  static const uint16_t PAYLOAD_SIZE = 0;
 };
 
 }  // namespace rtde_interface
