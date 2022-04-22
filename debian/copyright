@@ -1,0 +1,1091 @@
+Format: Bloom subset of https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: ur_client_library
+Upstream-Contact: https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues
+Source: https://github.com/UniversalRobots/Universal_Robots_Client_Library
+
+Files: See file headers in repository for details
+Copyright: See package copyright in source code for details
+License: Apache-2.0
+ Copyright 2019 FZI Forschungszentrum Informatik
+ .
+                                  Apache License
+                            Version 2.0, January 2004
+                         http://www.apache.org/licenses/
+ .
+    TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+ .
+    1. Definitions.
+ .
+       "License" shall mean the terms and conditions for use, reproduction,
+       and distribution as defined by Sections 1 through 9 of this document.
+ .
+       "Licensor" shall mean the copyright owner or entity authorized by
+       the copyright owner that is granting the License.
+ .
+       "Legal Entity" shall mean the union of the acting entity and all
+       other entities that control, are controlled by, or are under common
+       control with that entity. For the purposes of this definition,
+       "control" means (i) the power, direct or indirect, to cause the
+       direction or management of such entity, whether by contract or
+       otherwise, or (ii) ownership of fifty percent (50%) or more of the
+       outstanding shares, or (iii) beneficial ownership of such entity.
+ .
+       "You" (or "Your") shall mean an individual or Legal Entity
+       exercising permissions granted by this License.
+ .
+       "Source" form shall mean the preferred form for making modifications,
+       including but not limited to software source code, documentation
+       source, and configuration files.
+ .
+       "Object" form shall mean any form resulting from mechanical
+       transformation or translation of a Source form, including but
+       not limited to compiled object code, generated documentation,
+       and conversions to other media types.
+ .
+       "Work" shall mean the work of authorship, whether in Source or
+       Object form, made available under the License, as indicated by a
+       copyright notice that is included in or attached to the work
+       (an example is provided in the Appendix below).
+ .
+       "Derivative Works" shall mean any work, whether in Source or Object
+       form, that is based on (or derived from) the Work and for which the
+       editorial revisions, annotations, elaborations, or other modifications
+       represent, as a whole, an original work of authorship. For the purposes
+       of this License, Derivative Works shall not include works that remain
+       separable from, or merely link (or bind by name) to the interfaces of,
+       the Work and Derivative Works thereof.
+ .
+       "Contribution" shall mean any work of authorship, including
+       the original version of the Work and any modifications or additions
+       to that Work or Derivative Works thereof, that is intentionally
+       submitted to Licensor for inclusion in the Work by the copyright owner
+       or by an individual or Legal Entity authorized to submit on behalf of
+       the copyright owner. For the purposes of this definition, "submitted"
+       means any form of electronic, verbal, or written communication sent
+       to the Licensor or its representatives, including but not limited to
+       communication on electronic mailing lists, source code control systems,
+       and issue tracking systems that are managed by, or on behalf of, the
+       Licensor for the purpose of discussing and improving the Work, but
+       excluding communication that is conspicuously marked or otherwise
+       designated in writing by the copyright owner as "Not a Contribution."
+ .
+       "Contributor" shall mean Licensor and any individual or Legal Entity
+       on behalf of whom a Contribution has been received by Licensor and
+       subsequently incorporated within the Work.
+ .
+    2. Grant of Copyright License. Subject to the terms and conditions of
+       this License, each Contributor hereby grants to You a perpetual,
+       worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+       copyright license to reproduce, prepare Derivative Works of,
+       publicly display, publicly perform, sublicense, and distribute the
+       Work and such Derivative Works in Source or Object form.
+ .
+    3. Grant of Patent License. Subject to the terms and conditions of
+       this License, each Contributor hereby grants to You a perpetual,
+       worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+       (except as stated in this section) patent license to make, have made,
+       use, offer to sell, sell, import, and otherwise transfer the Work,
+       where such license applies only to those patent claims licensable
+       by such Contributor that are necessarily infringed by their
+       Contribution(s) alone or by combination of their Contribution(s)
+       with the Work to which such Contribution(s) was submitted. If You
+       institute patent litigation against any entity (including a
+       cross-claim or counterclaim in a lawsuit) alleging that the Work
+       or a Contribution incorporated within the Work constitutes direct
+       or contributory patent infringement, then any patent licenses
+       granted to You under this License for that Work shall terminate
+       as of the date such litigation is filed.
+ .
+    4. Redistribution. You may reproduce and distribute copies of the
+       Work or Derivative Works thereof in any medium, with or without
+       modifications, and in Source or Object form, provided that You
+       meet the following conditions:
+ .
+       (a) You must give any other recipients of the Work or
+           Derivative Works a copy of this License; and
+ .
+       (b) You must cause any modified files to carry prominent notices
+           stating that You changed the files; and
+ .
+       (c) You must retain, in the Source form of any Derivative Works
+           that You distribute, all copyright, patent, trademark, and
+           attribution notices from the Source form of the Work,
+           excluding those notices that do not pertain to any part of
+           the Derivative Works; and
+ .
+       (d) If the Work includes a "NOTICE" text file as part of its
+           distribution, then any Derivative Works that You distribute must
+           include a readable copy of the attribution notices contained
+           within such NOTICE file, excluding those notices that do not
+           pertain to any part of the Derivative Works, in at least one
+           of the following places: within a NOTICE text file distributed
+           as part of the Derivative Works; within the Source form or
+           documentation, if provided along with the Derivative Works; or,
+           within a display generated by the Derivative Works, if and
+           wherever such third-party notices normally appear. The contents
+           of the NOTICE file are for informational purposes only and
+           do not modify the License. You may add Your own attribution
+           notices within Derivative Works that You distribute, alongside
+           or as an addendum to the NOTICE text from the Work, provided
+           that such additional attribution notices cannot be construed
+           as modifying the License.
+ .
+       You may add Your own copyright statement to Your modifications and
+       may provide additional or different license terms and conditions
+       for use, reproduction, or distribution of Your modifications, or
+       for any such Derivative Works as a whole, provided Your use,
+       reproduction, and distribution of the Work otherwise complies with
+       the conditions stated in this License.
+ .
+    5. Submission of Contributions. Unless You explicitly state otherwise,
+       any Contribution intentionally submitted for inclusion in the Work
+       by You to the Licensor shall be under the terms and conditions of
+       this License, without any additional terms or conditions.
+       Notwithstanding the above, nothing herein shall supersede or modify
+       the terms of any separate license agreement you may have executed
+       with Licensor regarding such Contributions.
+ .
+    6. Trademarks. This License does not grant permission to use the trade
+       names, trademarks, service marks, or product names of the Licensor,
+       except as required for reasonable and customary use in describing the
+       origin of the Work and reproducing the content of the NOTICE file.
+ .
+    7. Disclaimer of Warranty. Unless required by applicable law or
+       agreed to in writing, Licensor provides the Work (and each
+       Contributor provides its Contributions) on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+       implied, including, without limitation, any warranties or conditions
+       of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+       PARTICULAR PURPOSE. You are solely responsible for determining the
+       appropriateness of using or redistributing the Work and assume any
+       risks associated with Your exercise of permissions under this License.
+ .
+    8. Limitation of Liability. In no event and under no legal theory,
+       whether in tort (including negligence), contract, or otherwise,
+       unless required by applicable law (such as deliberate and grossly
+       negligent acts) or agreed to in writing, shall any Contributor be
+       liable to You for damages, including any direct, indirect, special,
+       incidental, or consequential damages of any character arising as a
+       result of this License or out of the use or inability to use the
+       Work (including but not limited to damages for loss of goodwill,
+       work stoppage, computer failure or malfunction, or any and all
+       other commercial damages or losses), even if such Contributor
+       has been advised of the possibility of such damages.
+ .
+    9. Accepting Warranty or Additional Liability. While redistributing
+       the Work or Derivative Works thereof, You may choose to offer,
+       and charge a fee for, acceptance of support, warranty, indemnity,
+       or other liability obligations and/or rights consistent with this
+       License. However, in accepting such obligations, You may act only
+       on Your own behalf and on Your sole responsibility, not on behalf
+       of any other Contributor, and only if You agree to indemnify,
+       defend, and hold each Contributor harmless for any liability
+       incurred by, or claims asserted against, such Contributor by reason
+       of your accepting any such warranty or additional liability.
+ .
+    END OF TERMS AND CONDITIONS
+
+Files: See file headers in repository for details
+Copyright: See package copyright in source code for details
+License: BSD-2-Clause
+ This license applies to all the code in this folder except that written by third parties, namely
+ Jeff Preshing's semaphore implementation (used in the blocking queue) which has a zlib license
+ (embedded in atomicops.h).
+ .
+ Simplified BSD License:
+ .
+ Copyright (c) 2013-2015, Cameron Desrochers  
+ All rights reserved.
+ .
+ Redistribution and use in source and binary forms, with or without modification,
+ are permitted provided that the following conditions are met:
+ .
+ - Redistributions of source code must retain the above copyright notice, this list of
+ conditions and the following disclaimer.
+ - Redistributions in binary form must reproduce the above copyright notice, this list of
+ conditions and the following disclaimer in the documentation and/or other materials
+ provided with the distribution.
+ .
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+ EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+ THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+ OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+ TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Files: See file headers in repository for details
+Copyright: See package copyright in source code for details
+License: Zlib
+ // ©2013-2016 Cameron Desrochers.
+ // Distributed under the simplified BSD license (see the license file that
+ // should have come with this header).
+ // Uses Jeff Preshing's semaphore implementation (under the terms of its
+ // separate zlib license, embedded below).
+ .
+ #pragma once
+ .
+ // Provides portable (VC++2010+, Intel ICC 13, GCC 4.7+, and anything C++11 compliant) implementation
+ // of low-level memory barriers, plus a few semi-portable utility macros (for inlining and alignment).
+ // Also has a basic atomic type (limited to hardware-supported atomics with no memory ordering guarantees).
+ // Uses the AE_* prefix for macros (historical reasons), and the "moodycamel" namespace for symbols.
+ .
+ #include <cassert>
+ #include <cerrno>
+ #include <cstdint>
+ #include <ctime>
+ #include <type_traits>
+ .
+ // Platform detection
+ #if defined(__INTEL_COMPILER)
+ #define AE_ICC
+ #elif defined(_MSC_VER)
+ #define AE_VCPP
+ #elif defined(__GNUC__)
+ #define AE_GCC
+ #endif
+ .
+ #if defined(_M_IA64) || defined(__ia64__)
+ #define AE_ARCH_IA64
+ #elif defined(_WIN64) || defined(__amd64__) || defined(_M_X64) || defined(__x86_64__)
+ #define AE_ARCH_X64
+ #elif defined(_M_IX86) || defined(__i386__)
+ #define AE_ARCH_X86
+ #elif defined(_M_PPC) || defined(__powerpc__)
+ #define AE_ARCH_PPC
+ #else
+ #define AE_ARCH_UNKNOWN
+ #endif
+ .
+ // AE_UNUSED
+ #define AE_UNUSED(x) ((void)x)
+ .
+ // AE_FORCEINLINE
+ #if defined(AE_VCPP) || defined(AE_ICC)
+ #define AE_FORCEINLINE __forceinline
+ #elif defined(AE_GCC)
+ //#define AE_FORCEINLINE __attribute__((always_inline))
+ #define AE_FORCEINLINE inline
+ #else
+ #define AE_FORCEINLINE inline
+ #endif
+ .
+ // AE_ALIGN
+ #if defined(AE_VCPP) || defined(AE_ICC)
+ #define AE_ALIGN(x) __declspec(align(x))
+ #elif defined(AE_GCC)
+ #define AE_ALIGN(x) __attribute__((aligned(x)))
+ #else
+ // Assume GCC compliant syntax...
+ #define AE_ALIGN(x) __attribute__((aligned(x)))
+ #endif
+ .
+ // Portable atomic fences implemented below:
+ .
+ namespace moodycamel
+ {
+ enum memory_order
+ {
+   memory_order_relaxed,
+   memory_order_acquire,
+   memory_order_release,
+   memory_order_acq_rel,
+   memory_order_seq_cst,
+ .
+   // memory_order_sync: Forces a full sync:
+   // #LoadLoad, #LoadStore, #StoreStore, and most significantly, #StoreLoad
+   memory_order_sync = memory_order_seq_cst
+ };
+ .
+ }  // end namespace moodycamel
+ .
+ #if (defined(AE_VCPP) && (_MSC_VER < 1700 || defined(__cplusplus_cli))) || defined(AE_ICC)
+ // VS2010 and ICC13 don't support std::atomic_*_fence, implement our own fences
+ .
+ #include <intrin.h>
+ .
+ #if defined(AE_ARCH_X64) || defined(AE_ARCH_X86)
+ #define AeFullSync _mm_mfence
+ #define AeLiteSync _mm_mfence
+ #elif defined(AE_ARCH_IA64)
+ #define AeFullSync __mf
+ #define AeLiteSync __mf
+ #elif defined(AE_ARCH_PPC)
+ #include <ppcintrinsics.h>
+ #define AeFullSync __sync
+ #define AeLiteSync __lwsync
+ #endif
+ .
+ #ifdef AE_VCPP
+ #pragma warning(push)
+ #pragma warning(disable : 4365)  // Disable erroneous 'conversion from long to unsigned int, signed/unsigned mismatch'
+                                  // error when using `assert`
+ #ifdef __cplusplus_cli
+ #pragma managed(push, off)
+ #endif
+ #endif
+ .
+ namespace moodycamel
+ {
+ AE_FORCEINLINE void compilerFence(memory_order order)
+ {
+   switch (order)
+   {
+     case memory_order_relaxed:
+       break;
+     case memory_order_acquire:
+       _ReadBarrier();
+       break;
+     case memory_order_release:
+       _WriteBarrier();
+       break;
+     case memory_order_acq_rel:
+       _ReadWriteBarrier();
+       break;
+     case memory_order_seq_cst:
+       _ReadWriteBarrier();
+       break;
+     default:
+       assert(false);
+   }
+ }
+ .
+ // x86/x64 have a strong memory model -- all loads and stores have
+ // acquire and release semantics automatically (so only need compiler
+ // barriers for those).
+ #if defined(AE_ARCH_X86) || defined(AE_ARCH_X64)
+ AE_FORCEINLINE void fence(memory_order order)
+ {
+   switch (order)
+   {
+     case memory_order_relaxed:
+       break;
+     case memory_order_acquire:
+       _ReadBarrier();
+       break;
+     case memory_order_release:
+       _WriteBarrier();
+       break;
+     case memory_order_acq_rel:
+       _ReadWriteBarrier();
+       break;
+     case memory_order_seq_cst:
+       _ReadWriteBarrier();
+       AeFullSync();
+       _ReadWriteBarrier();
+       break;
+     default:
+       assert(false);
+   }
+ }
+ #else
+ AE_FORCEINLINE void fence(memory_order order)
+ {
+   // Non-specialized arch, use heavier memory barriers everywhere just in case :-(
+   switch (order)
+   {
+     case memory_order_relaxed:
+       break;
+     case memory_order_acquire:
+       _ReadBarrier();
+       AeLiteSync();
+       _ReadBarrier();
+       break;
+     case memory_order_release:
+       _WriteBarrier();
+       AeLiteSync();
+       _WriteBarrier();
+       break;
+     case memory_order_acq_rel:
+       _ReadWriteBarrier();
+       AeLiteSync();
+       _ReadWriteBarrier();
+       break;
+     case memory_order_seq_cst:
+       _ReadWriteBarrier();
+       AeFullSync();
+       _ReadWriteBarrier();
+       break;
+     default:
+       assert(false);
+   }
+ }
+ #endif
+ }  // end namespace moodycamel
+ #else
+ // Use standard library of atomics
+ #include <atomic>
+ .
+ namespace moodycamel
+ {
+ AE_FORCEINLINE void compilerFence(memory_order order)
+ {
+   switch (order)
+   {
+     case memory_order_relaxed:
+       break;
+     case memory_order_acquire:
+       std::atomic_signal_fence(std::memory_order_acquire);
+       break;
+     case memory_order_release:
+       std::atomic_signal_fence(std::memory_order_release);
+       break;
+     case memory_order_acq_rel:
+       std::atomic_signal_fence(std::memory_order_acq_rel);
+       break;
+     case memory_order_seq_cst:
+       std::atomic_signal_fence(std::memory_order_seq_cst);
+       break;
+     default:
+       assert(false);
+   }
+ }
+ .
+ AE_FORCEINLINE void fence(memory_order order)
+ {
+   switch (order)
+   {
+     case memory_order_relaxed:
+       break;
+     case memory_order_acquire:
+       std::atomic_thread_fence(std::memory_order_acquire);
+       break;
+     case memory_order_release:
+       std::atomic_thread_fence(std::memory_order_release);
+       break;
+     case memory_order_acq_rel:
+       std::atomic_thread_fence(std::memory_order_acq_rel);
+       break;
+     case memory_order_seq_cst:
+       std::atomic_thread_fence(std::memory_order_seq_cst);
+       break;
+     default:
+       assert(false);
+   }
+ }
+ .
+ }  // end namespace moodycamel
+ .
+ #endif
+ .
+ #if !defined(AE_VCPP) || (_MSC_VER >= 1700 && !defined(__cplusplus_cli))
+ #define AE_USE_STD_ATOMIC_FOR_WEAK_ATOMIC
+ #endif
+ .
+ #ifdef AE_USE_STD_ATOMIC_FOR_WEAK_ATOMIC
+ #include <atomic>
+ #endif
+ #include <utility>
+ .
+ // WARNING: *NOT* A REPLACEMENT FOR std::atomic. READ CAREFULLY:
+ // Provides basic support for atomic variables -- no memory ordering guarantees are provided.
+ // The guarantee of atomicity is only made for types that already have atomic load and store guarantees
+ // at the hardware level -- on most platforms this generally means aligned pointers and integers (only).
+ namespace moodycamel
+ {
+ template <typename T>
+ class WeakAtomic
+ {
+ public:
+   WeakAtomic()
+   {
+   }
+ #ifdef AE_VCPP
+ #pragma warning(disable : 4100)  // Get rid of (erroneous) 'unreferenced formal parameter' warning
+ #endif
+   template <typename U>
+   WeakAtomic(U&& x) : value_(std::forward<U>(x))
+   {
+   }
+ #ifdef __cplusplus_cli
+   // Work around bug with universal reference/nullptr combination that only appears when /clr is on
+   WeakAtomic(nullptr_t) : value_(nullptr)
+   {
+   }
+ #endif
+   WeakAtomic(WeakAtomic const& other) : value_(other.value_)
+   {
+   }
+   WeakAtomic(WeakAtomic&& other) : value_(std::move(other.value_))
+   {
+   }
+ #ifdef AE_VCPP
+ #pragma warning(default : 4100)
+ #endif
+ .
+   AE_FORCEINLINE operator T() const
+   {
+     return load();
+   }
+ .
+ #ifndef AE_USE_STD_ATOMIC_FOR_WEAK_ATOMIC
+   template <typename U>
+   AE_FORCEINLINE WeakAtomic const& operator=(U&& x)
+   {
+     value_ = std::forward<U>(x);
+     return *this;
+   }
+   AE_FORCEINLINE WeakAtomic const& operator=(WeakAtomic const& other)
+   {
+     value_ = other.value_;
+     return *this;
+   }
+ .
+   AE_FORCEINLINE T load() const
+   {
+     return value_;
+   }
+ .
+   AE_FORCEINLINE T fetchAddAcquire(T increment)
+   {
+ #if defined(AE_ARCH_X64) || defined(AE_ARCH_X86)
+     if (sizeof(T) == 4)
+       return _InterlockedExchangeAdd((long volatile*)&value_, (long)increment);
+ #if defined(_M_AMD64)
+     else if (sizeof(T) == 8)
+       return _InterlockedExchangeAdd64((long long volatile*)&value_, (long long)increment);
+ #endif
+ #else
+ #error Unsupported platform
+ #endif
+     assert(false && "T must be either a 32 or 64 bit type");
+     return value_;
+   }
+ .
+   AE_FORCEINLINE T fetchAddRelease(T increment)
+   {
+ #if defined(AE_ARCH_X64) || defined(AE_ARCH_X86)
+     if (sizeof(T) == 4)
+       return _InterlockedExchangeAdd((long volatile*)&value_, (long)increment);
+ #if defined(_M_AMD64)
+     else if (sizeof(T) == 8)
+       return _InterlockedExchangeAdd64((long long volatile*)&value_, (long long)increment);
+ #endif
+ #else
+ #error Unsupported platform
+ #endif
+     assert(false && "T must be either a 32 or 64 bit type");
+     return value_;
+   }
+ #else
+   template <typename U>
+   AE_FORCEINLINE WeakAtomic const& operator=(U&& x)
+   {
+     value_.store(std::forward<U>(x), std::memory_order_relaxed);
+     return *this;
+   }
+ .
+   AE_FORCEINLINE WeakAtomic const& operator=(WeakAtomic const& other)
+   {
+     value_.store(other.value_.load(std::memory_order_relaxed), std::memory_order_relaxed);
+     return *this;
+   }
+ .
+   AE_FORCEINLINE T load() const
+   {
+     return value_.load(std::memory_order_relaxed);
+   }
+ .
+   AE_FORCEINLINE T fetchAddAcquire(T increment)
+   {
+     return value_.fetch_add(increment, std::memory_order_acquire);
+   }
+ .
+   AE_FORCEINLINE T fetchAddRelease(T increment)
+   {
+     return value_.fetch_add(increment, std::memory_order_release);
+   }
+ #endif
+ .
+ private:
+ #ifndef AE_USE_STD_ATOMIC_FOR_WEAK_ATOMIC
+   // No std::atomic support, but still need to circumvent compiler optimizations.
+   // `volatile` will make memory access slow, but is guaranteed to be reliable.
+   volatile T value_;
+ #else
+   std::atomic<T> value_;
+ #endif
+ };
+ .
+ }  // end namespace moodycamel
+ .
+ // Portable single-producer, single-consumer semaphore below:
+ .
+ #if defined(_WIN32)
+ // Avoid including windows.h in a header; we only need a handful of
+ // items, so we'll redeclare them here (this is relatively safe since
+ // the API generally has to remain stable between Windows versions).
+ // I know this is an ugly hack but it still beats polluting the global
+ // namespace with thousands of generic names or adding a .cpp for nothing.
+ extern "C" {
+ struct _SECURITY_ATTRIBUTES;
+ __declspec(dllimport) void* __stdcall CreateSemaphoreW(_SECURITY_ATTRIBUTES* lpSemaphoreAttributes, long lInitialCount,
+                                                        long lMaximumCount, const wchar_t* lpName);
+ __declspec(dllimport) int __stdcall CloseHandle(void* hObject);
+ __declspec(dllimport) unsigned long __stdcall WaitForSingleObject(void* hHandle, unsigned long dwMilliseconds);
+ __declspec(dllimport) int __stdcall ReleaseSemaphore(void* hSemaphore, long lReleaseCount, long* lpPreviousCount);
+ }
+ #elif defined(__MACH__)
+ #include <mach/mach.h>
+ #elif defined(__unix__)
+ #include <semaphore.h>
+ #endif
+ .
+ namespace moodycamel
+ {
+ // Code in the spsc_sema namespace below is an adaptation of Jeff Preshing's
+ // portable + lightweight semaphore implementations, originally from
+ // https://github.com/preshing/cpp11-on-multicore/blob/master/common/sema.h
+ // LICENSE:
+ // Copyright (c) 2015 Jeff Preshing
+ //
+ // This software is provided 'as-is', without any express or implied
+ // warranty. In no event will the authors be held liable for any damages
+ // arising from the use of this software.
+ //
+ // Permission is granted to anyone to use this software for any purpose,
+ // including commercial applications, and to alter it and redistribute it
+ // freely, subject to the following restrictions:
+ //
+ // 1. The origin of this software must not be misrepresented; you must not
+ //    claim that you wrote the original software. If you use this software
+ //    in a product, an acknowledgement in the product documentation would be
+ //    appreciated but is not required.
+ // 2. Altered source versions must be plainly marked as such, and must not be
+ //    misrepresented as being the original software.
+ // 3. This notice may not be removed or altered from any source distribution.
+ namespace spsc_sema
+ {
+ #if defined(_WIN32)
+ class Semaphore
+ {
+ private:
+   void* m_hSema;
+ .
+   Semaphore(const Semaphore& other);
+   Semaphore& operator=(const Semaphore& other);
+ .
+ public:
+   Semaphore(int initialCount = 0)
+   {
+     assert(initialCount >= 0);
+     const long maxLong = 0x7fffffff;
+     m_hSema = CreateSemaphoreW(nullptr, initialCount, maxLong, nullptr);
+   }
+ .
+   ~Semaphore()
+   {
+     CloseHandle(m_hSema);
+   }
+ .
+   void wait()
+   {
+     const unsigned long infinite = 0xffffffff;
+     WaitForSingleObject(m_hSema, infinite);
+   }
+ .
+   bool tryWait()
+   {
+     const unsigned long RC_WAIT_TIMEOUT = 0x00000102;
+     return WaitForSingleObject(m_hSema, 0) != RC_WAIT_TIMEOUT;
+   }
+ .
+   bool timedWait(std::uint64_t usecs)
+   {
+     const unsigned long RC_WAIT_TIMEOUT = 0x00000102;
+     return WaitForSingleObject(m_hSema, (unsigned long)(usecs / 1000)) != RC_WAIT_TIMEOUT;
+   }
+ .
+   void signal(int count = 1)
+   {
+     ReleaseSemaphore(m_hSema, count, nullptr);
+   }
+ };
+ #elif defined(__MACH__)
+ //---------------------------------------------------------
+ // Semaphore (Apple iOS and OSX)
+ // Can't use POSIX semaphores due to http://lists.apple.com/archives/darwin-kernel/2009/Apr/msg00010.html
+ //---------------------------------------------------------
+ class Semaphore
+ {
+ private:
+   semaphore_t sema_;
+ .
+   Semaphore(const Semaphore& other);
+   Semaphore& operator=(const Semaphore& other);
+ .
+ public:
+   Semaphore(int initialCount = 0)
+   {
+     assert(initialCount >= 0);
+     semaphore_create(mach_task_self(), &sema_, SYNC_POLICY_FIFO, initialCount);
+   }
+ .
+   ~Semaphore()
+   {
+     semaphore_destroy(mach_task_self(), sema_);
+   }
+ .
+   void wait()
+   {
+     semaphore_wait(sema_);
+   }
+ .
+   bool tryWait()
+   {
+     return timedWait(0);
+   }
+ .
+   bool timedWait(std::int64_t timeout_usecs)
+   {
+     mach_timespec_t ts;
+     ts.tv_sec = timeout_usecs / 1000000;
+     ts.tv_nsec = (timeout_usecs % 1000000) * 1000;
+ .
+     // added in OSX 10.10:
+     // https://developer.apple.com/library/prerelease/mac/documentation/General/Reference/APIDiffsMacOSX10_10SeedDiff/modules/Darwin.html
+     kern_return_t rc = semaphore_timedwait(sema_, ts);
+ .
+     return rc != KERN_OPERATION_TIMED_OUT;
+   }
+ .
+   void signal()
+   {
+     semaphore_signal(sema_);
+   }
+ .
+   void signal(int count)
+   {
+     while (count-- > 0)
+     {
+       semaphore_signal(sema_);
+     }
+   }
+ };
+ #elif defined(__unix__)
+ //---------------------------------------------------------
+ // Semaphore (POSIX, Linux)
+ //---------------------------------------------------------
+ class Semaphore
+ {
+ private:
+   sem_t sema_;
+ .
+   Semaphore(const Semaphore& other);
+   Semaphore& operator=(const Semaphore& other);
+ .
+ public:
+   Semaphore(int initialCount = 0)
+   {
+     assert(initialCount >= 0);
+     sem_init(&sema_, 0, initialCount);
+   }
+ .
+   ~Semaphore()
+   {
+     sem_destroy(&sema_);
+   }
+ .
+   void wait()
+   {
+     // http://stackoverflow.com/questions/2013181/gdb-causes-sem-wait-to-fail-with-eintr-error
+     int rc;
+     do
+     {
+       rc = sem_wait(&sema_);
+     } while (rc == -1 && errno == EINTR);
+   }
+ .
+   bool tryWait()
+   {
+     int rc;
+     do
+     {
+       rc = sem_trywait(&sema_);
+     } while (rc == -1 && errno == EINTR);
+     return !(rc == -1 && errno == EAGAIN);
+   }
+ .
+   bool timedWait(std::uint64_t usecs)
+   {
+     struct timespec ts;
+     const int usecs_in_1_sec = 1000000;
+     const int nsecs_in_1_sec = 1000000000;
+     clock_gettime(CLOCK_REALTIME, &ts);
+     ts.tv_sec += usecs / usecs_in_1_sec;
+     ts.tv_nsec += (usecs % usecs_in_1_sec) * 1000;
+     // sem_timedwait bombs if you have more than 1e9 in tv_nsec
+     // so we have to clean things up before passing it in
+     if (ts.tv_nsec > nsecs_in_1_sec)
+     {
+       ts.tv_nsec -= nsecs_in_1_sec;
+       ++ts.tv_sec;
+     }
+ .
+     int rc;
+     do
+     {
+       rc = sem_timedwait(&sema_, &ts);
+     } while (rc == -1 && errno == EINTR);
+     return !(rc == -1 && errno == ETIMEDOUT);
+   }
+ .
+   void signal()
+   {
+     sem_post(&sema_);
+   }
+ .
+   void signal(int count)
+   {
+     while (count-- > 0)
+     {
+       sem_post(&sema_);
+     }
+   }
+ };
+ #else
+ #error Unsupported platform! (No semaphore wrapper available)
+ #endif
+ .
+ //---------------------------------------------------------
+ // LightweightSemaphore
+ //---------------------------------------------------------
+ class LightweightSemaphore
+ {
+ public:
+   typedef std::make_signed<std::size_t>::type ssize_t;
+ .
+ private:
+   WeakAtomic<ssize_t> count_;
+   Semaphore sema_;
+ .
+   bool waitWithPartialSpinning(std::int64_t timeout_usecs = -1)
+   {
+     ssize_t old_count;
+     // Is there a better way to set the initial spin count?
+     // If we lower it to 1000, testBenaphore becomes 15x slower on my Core i7-5930K Windows PC,
+     // as threads start hitting the kernel semaphore.
+     int spin = 10000;
+     while (--spin >= 0)
+     {
+       if (count_.load() > 0)
+       {
+         count_.fetchAddAcquire(-1);
+         return true;
+       }
+       compilerFence(memory_order_acquire);  // Prevent the compiler from collapsing the loop.
+     }
+     old_count = count_.fetchAddAcquire(-1);
+     if (old_count > 0)
+       return true;
+     if (timeout_usecs < 0)
+     {
+       sema_.wait();
+       return true;
+     }
+     if (sema_.timedWait(timeout_usecs))
+       return true;
+     // At this point, we've timed out waiting for the semaphore, but the
+     // count is still decremented indicating we may still be waiting on
+     // it. So we have to re-adjust the count, but only if the semaphore
+     // wasn't signaled enough times for us too since then. If it was, we
+     // need to release the semaphore too.
+     while (true)
+     {
+       old_count = count_.fetchAddRelease(1);
+       if (old_count < 0)
+         return false;  // successfully restored things to the way they were
+       // Oh, the producer thread just signaled the semaphore after all. Try again:
+       old_count = count_.fetchAddAcquire(-1);
+       if (old_count > 0 && sema_.tryWait())
+         return true;
+     }
+   }
+ .
+ public:
+   LightweightSemaphore(ssize_t initialCount = 0) : count_(initialCount)
+   {
+     assert(initialCount >= 0);
+   }
+ .
+   bool tryWait()
+   {
+     if (count_.load() > 0)
+     {
+       count_.fetchAddAcquire(-1);
+       return true;
+     }
+     return false;
+   }
+ .
+   void wait()
+   {
+     if (!tryWait())
+       waitWithPartialSpinning();
+   }
+ .
+   bool wait(std::int64_t timeout_usecs)
+   {
+     return tryWait() || waitWithPartialSpinning(timeout_usecs);
+   }
+ .
+   void signal(ssize_t count = 1)
+   {
+     assert(count >= 0);
+     ssize_t old_count = count_.fetchAddRelease(count);
+     assert(old_count >= -1);
+     if (old_count < 0)
+     {
+       sema_.signal(1);
+     }
+   }
+ .
+   ssize_t availableApprox() const
+   {
+     ssize_t count = count_.load();
+     return count > 0 ? count : 0;
+   }
+ };
+ }  // end namespace spsc_sema
+ }  // end namespace moodycamel
+ .
+ #if defined(AE_VCPP) && (_MSC_VER < 1700 || defined(__cplusplus_cli))
+ #pragma warning(pop)
+ #ifdef __cplusplus_cli
+ #pragma managed(pop)
+ #endif
+ #endif
+
+Files: See file headers in repository for details
+Copyright: See package copyright in source code for details
+License: MIT
+ # MIT License
+ #
+ # Original from https://github.com/ahobsonsayers/DockURSim
+ # Copyright (c) 2019 Arran Hobson Sayers
+ #
+ # Permission is hereby granted, free of charge, to any person obtaining a copy
+ # of this software and associated documentation files (the "Software"), to deal
+ # in the Software without restriction, including without limitation the rights
+ # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ # copies of the Software, and to permit persons to whom the Software is
+ # furnished to do so, subject to the following conditions:
+ #
+ # The above copyright notice and this permission notice shall be included in all
+ # copies or substantial portions of the Software.
+ #
+ # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ # SOFTWARE.
+ .
+ FROM lsiobase/guacgui:latest
+ .
+ # Set Version Information
+ ARG VERSION="5.8.0.10253"
+ LABEL build_version="URSim Version: ${VERSION}"
+ ENV APPNAME="URSim"
+ .
+ # Set Timezone
+ ARG TZ="Europe/London"
+ ENV TZ ${TZ}
+ .
+ # Setup Environment
+ ENV DEBIAN_FRONTEND noninteractive
+ .
+ # Set Home Directory
+ ENV HOME /ursim
+ .
+ # Set robot model - Can be UR3, UR5 or UR10
+ ENV ROBOT_MODEL UR5
+ .
+ RUN \
+     echo "**** Installing Dependencies ****" && \
+     apt-get update && \
+     apt-get install -qy --no-install-recommends \
+     openjdk-8-jre psmisc && \
+     # Change java alternatives so we use openjdk8 (required by URSim) not openjdk11 that comes with guacgui
+     update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java 10000
+ .
+ # Setup JAVA_HOME
+ ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+ .
+ RUN \
+     echo "**** Downloading URSim ****" && \
+     # Make sure we are in the root
+     cd /
+     # Download URSim Linux tar.gz
+ RUN \
+     if [ "$VERSION" = "5.8.0.10253" ]; then \
+       curl https://s3-eu-west-1.amazonaws.com/ur-support-site/69987/URSim_Linux-5.8.0.10253.tar.gz -o URSim-Linux.tar.gz; \
+     elif [ "$VERSION" = "5.9.1.1031110" ]; then \
+       curl https://s3-eu-west-1.amazonaws.com/ur-support-site/77055/URSim_Linux-5.9.1.1031110.tar.gz -o URSim-Linux.tar.gz; \
+     elif [ "$VERSION" = "3.14.1.1031110" ]; then \
+       curl https://s3-eu-west-1.amazonaws.com/ur-support-site/77041/URSim_Linux-3.14.1.1031110.tar.gz -o URSim-Linux.tar.gz; \
+     else \
+       echo "Unknown version passed to Dockerfile. Exiting" &&\
+       exit 1; \
+     fi
+ RUN \
+     # Extract tarball
+     tar xvzf URSim-Linux.tar.gz && \
+     #Remove the tarball
+     rm URSim-Linux.tar.gz && \
+     # Rename the URSim folder to jus ursim
+     mv  /ursim* /ursim
+ .
+ RUN \
+     echo "**** Installing URSim ****" && \
+     # cd to ursim folder
+     cd /ursim && \
+     # Make URControl and all sh files executable
+     chmod +x ./*.sh ./URControl && \
+     #
+     # Stop install of unnecessary packages and install required ones quietly
+     sed -i 's|apt-get -y install|apt-get -qy install --no-install-recommends|g' ./install.sh && \
+     # Skip xterm command. We dont have a desktop
+     sed -i 's|tty -s|(exit 0)|g' install.sh && \
+     # Skip Check of Java Version as we have the correct installed and the command will fail
+     sed -i 's|needToInstallJava$|(exit 0)|g' install.sh && \
+     # Skip install of desktop shortcuts - we dont have a desktop
+     sed -i '/for TYPE in UR3 UR5 UR10/,$ d' ./install.sh  && \
+     # Remove commands that are not relevant on docker as we are root user
+     sed -i 's|pkexec ||g' ./install.sh && \
+     sed -i 's|sudo ||g' ./install.sh && \
+     #sed -i 's|sudo ||g' ./ursim-certificate-check.sh && \
+     #
+     # Install URSim
+     ./install.sh && \
+     #
+     echo "Installed URSim"
+ .
+ RUN \
+     echo "**** Clean Up ****" && \
+     rm -rf \
+     /tmp/* \
+     /var/lib/apt/lists/* \
+     /var/tmp/*
+ .
+ # Copy ursim run service script
+ COPY ursim /etc/services.d/ursim
+ COPY safety.conf.UR5 /ursim/.urcontrol/
+ # Expose ports
+ # Guacamole web browser viewer
+ EXPOSE 8080
+ # VNC viewer
+ EXPOSE 3389
+ # Modbus Port
+ EXPOSE 502
+ # Interface Ports
+ EXPOSE 29999
+ EXPOSE 30001-30004
+ .
+ # Mount Volumes
+ VOLUME /ursim
+ .
+ ENTRYPOINT ["/init"]
