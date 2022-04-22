@@ -3,6 +3,7 @@
 
 // -- BEGIN LICENSE BLOCK ----------------------------------------------
 // Copyright 2019 FZI Forschungszentrum Informatik
+// Created on behalf of Universal Robots A/S
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,6 +31,7 @@
 #define UR_CLIENT_LIBRARY_SCRIPT_SENDER_H_INCLUDED
 
 #include <thread>
+#include <string>
 
 #include "ur_client_library/comm/tcp_server.h"
 #include "ur_client_library/log.h"
