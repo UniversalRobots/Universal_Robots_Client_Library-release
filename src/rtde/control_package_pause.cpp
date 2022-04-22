@@ -2,6 +2,7 @@
 
 // -- BEGIN LICENSE BLOCK ----------------------------------------------
 // Copyright 2019 FZI Forschungszentrum Informatik
+// Created on behalf of Universal Robots A/S
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -44,5 +45,11 @@ std::string ControlPackagePause::toString() const
 
   return ss.str();
 }
+
+size_t ControlPackagePauseRequest::generateSerializedRequest(uint8_t* buffer)
+{
+  return PackageHeader::serializeHeader(buffer, PackageType::RTDE_CONTROL_PACKAGE_PAUSE, PAYLOAD_SIZE);
+}
+
 }  // namespace rtde_interface
 }  // namespace urcl
