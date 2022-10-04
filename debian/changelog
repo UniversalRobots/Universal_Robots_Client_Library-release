@@ -1,0 +1,71 @@
+ros-foxy-ur-client-library (1.2.0-1focal) focal; urgency=high
+
+  * Initialized receive timeout and changed exception to warning (#118 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/118>)
+  * Added tests for the control interface classes (#112 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/112>)
+  * Added note about Polyscope version requirement
+  * Added tcp_offset
+  * Added interface for forwarding script commands to the robot, that is … (#111 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/111>)
+  * Fixed parsing of incomming packages when using rtde protocol v1 (#114 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/114>)
+    The received rtde packages should be parsed slightly different whether we use protocol v1 or v2.
+  * Add codecov step (#116 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/116>)
+  * Added humble build
+  * Fixed downstream test instructions
+  * Update atomicops.h (#117 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/117>)
+    Fix the url in the comment regarding POSIX semaphores to fix error in the CI
+  * Make the read during boot depend on the frequency of the robot controller (#102 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/102>)
+  * Ignore debian folder in check_links (#100 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/100>)
+    Otherwise this job raises an error in the release repository.
+  * Contributors: Felix Exner, Mads Holm Peters, Rune Søe-Knudsen, urmahp, urmarp
+
+ -- Felix Exner <exner@fzi.de>  Mon, 03 Oct 2022 22:00:00 -0000
+
+ros-foxy-ur-client-library (1.1.0-1focal) focal; urgency=high
+
+  * Support starting the driver, before the robot is booted (#98 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/98>)
+  * Clear the queue when consumer reads from it (#96 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/96>)
+  * Fix build with newer glibc
+  * Doxygen check (#77 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/77>)
+  * Added target_frequency to RTDEClient (#85 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/85>)
+  * Removed console_bridge dependency (#74 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/74>)
+  * Added "On behalf of Universal Robots A/S" notice (#81 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/81>)
+    to all files that have been created by FZI
+  * Always install package.xml file (#78 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/78>)
+  * register package with ament index
+  * Corrected smaller doxygen errors
+  * Added rosdoc_lite check
+  * Contributors: Cory Crean, Felix Exner, Jørn Bersvendsen, Mads Holm Peters, Martin Jansa, Stefan Scherzinger
+
+ -- Felix Exner <exner@fzi.de>  Thu, 21 Apr 2022 22:00:00 -0000
+
+ros-foxy-ur-client-library (1.0.0-1focal) focal; urgency=high
+
+  * Added Cartesian streaming interface #75 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/75>
+  * Added trajectory forwarding interface #72 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/72>
+  * Refactored Reverse interface #70 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/70> from fmauch/refactor_reverse_interface
+  * Added option for robot_ip as runtime argument for rtde_test (#71 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/71>)
+  * Added reverse_ip parameter (#52 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/52>)
+  * Move calibration check out of constructor. #65 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/65> from fmauch/calibration_check_optional
+  * Install the resources folder instead of the script file directly (#62 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/62>)
+  * Use a non-blocking tcp server for the ReverseInterface and ScriptSender. #46 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/46> from fmauch/tcp_server
+  * Added LogHandler #40 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/40> from urmahp/logging_feature
+  * Fixed links in README (#35 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/35>)
+  * Contributors: Felix Exner, G.A. vd. Hoorn, JS00000, Lennart Puck, Mads Holm Peters, Tristan Schnell
+
+ -- Felix Exner <exner@fzi.de>  Thu, 17 Jun 2021 22:00:00 -0000
+
+ros-foxy-ur-client-library (0.1.1-1focal) focal; urgency=high
+
+  * readme: missing whitespace
+  * Further elaborated license statements in README
+  * Install package.xml when built with catkin support
+  * Contributors: Felix Exner, G.A. vd. Hoorn
+
+ -- Felix Exner <exner@fzi.de>  Mon, 14 Sep 2020 22:00:00 -0000
+
+ros-foxy-ur-client-library (0.1.0-1focal) focal; urgency=high
+
+  * initial standalone release
+
+ -- Felix Exner <exner@fzi.de>  Thu, 10 Sep 2020 22:00:00 -0000
+
+
