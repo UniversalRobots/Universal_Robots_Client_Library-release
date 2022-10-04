@@ -1,3 +1,26 @@
+## ur_client_library (galactic) - 1.2.0-1
+
+The packages in the `ur_client_library` repository were released into the `galactic` distro by running `/usr/bin/bloom-release --rosdistro galactic --track galactic ur_client_library` on `Tue, 04 Oct 2022 15:33:11 -0000`
+
+The `ur_client_library` package was released.
+
+Version of package(s) in repository `ur_client_library`:
+
+- upstream repository: https://github.com/UniversalRobots/Universal_Robots_Client_Library
+- release repository: https://github.com/UniversalRobots/Universal_Robots_Client_Library-release.git
+- rosdistro version: `1.1.0-1`
+- old version: `1.1.0-1`
+- new version: `1.2.0-1`
+
+Versions of tools used:
+
+- bloom version: `0.11.2`
+- catkin_pkg version: `0.5.2`
+- rosdep version: `0.22.1`
+- rosdistro version: `0.9.0`
+- vcstools version: `0.1.42`
+
+
 ## ur_client_library (foxy) - 1.1.0-1
 
 The packages in the `ur_client_library` repository were released into the `foxy` distro by running `/usr/bin/bloom-release --rosdistro foxy --track foxy ur_client_library` on `Fri, 22 Apr 2022 12:09:36 -0000`
