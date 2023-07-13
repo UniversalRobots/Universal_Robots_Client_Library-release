@@ -1,3 +1,26 @@
+## ur_client_library (noetic) - 1.3.2-1
+
+The packages in the `ur_client_library` repository were released into the `noetic` distro by running `/home/mauch/.local/bin/bloom-release ur_client_library --track noetic --rosdistro noetic` on `Thu, 13 Jul 2023 17:47:49 -0000`
+
+The `ur_client_library` package was released.
+
+Version of package(s) in repository `ur_client_library`:
+
+- upstream repository: https://github.com/UniversalRobots/Universal_Robots_Client_Library
+- release repository: https://github.com/UniversalRobots/Universal_Robots_Client_Library-release.git
+- rosdistro version: `1.3.1-1`
+- old version: `1.3.1-1`
+- new version: `1.3.2-1`
+
+Versions of tools used:
+
+- bloom version: `0.11.2`
+- catkin_pkg version: `0.5.2`
+- rosdep version: `0.22.2`
+- rosdistro version: `0.9.0`
+- vcstools version: `0.1.42`
+
+
 ## ur_client_library (foxy) - 1.3.1-1
 
 The packages in the `ur_client_library` repository were released into the `foxy` distro by running `/usr/bin/bloom-release ur_client_library --track foxy --rosdistro foxy` on `Wed, 30 Nov 2022 15:50:04 -0000`
