@@ -1,7 +1,7 @@
 // this is for emacs file handling -*- mode: c++; indent-tabs-mode: nil -*-
 
 // -- BEGIN LICENSE BLOCK ----------------------------------------------
-// Copyright 2020 FZI Forschungszentrum Informatik
+// Copyright 2022 Universal Robots A/S
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,16 +17,8 @@
 //
 // -- END LICENSE BLOCK ------------------------------------------------
 
-//----------------------------------------------------------------------
-/*!\file
- *
- * \author  Felix Exner mauch@fzi.de
- * \date    2020-08-06
- *
- * Make sure to run this program from its source directory in order to find the respective files.
- *
- */
-//----------------------------------------------------------------------
+// In a real-world example it would be better to get those values from command line parameters / a
+// better configuration system such as Boost.Program_options
 
 #include <ur_client_library/ur/dashboard_client.h>
 #include <ur_client_library/ur/ur_driver.h>
@@ -37,8 +29,6 @@
 
 using namespace urcl;
 
-// In a real-world example it would be better to get those values from command line parameters / a
-// better configuration system such as Boost.Program_options
 const std::string DEFAULT_ROBOT_IP = "192.168.56.101";
 const std::string SCRIPT_FILE = "resources/external_control.urscript";
 const std::string OUTPUT_RECIPE = "examples/resources/rtde_output_recipe.txt";
@@ -47,7 +37,8 @@ const std::string CALIBRATION_CHECKSUM = "calib_12788084448423163542";
 
 std::unique_ptr<UrDriver> g_my_driver;
 std::unique_ptr<DashboardClient> g_my_dashboard;
-vector6d_t g_joint_positions;
+bool g_tool_contact_result_triggered;
+control::ToolContactResult g_tool_contact_result;
 
 // We need a callback function to register. See UrDriver's parameters for details.
 void handleRobotProgramState(bool program_running)
@@ -56,15 +47,29 @@ void handleRobotProgramState(bool program_running)
   std::cout << "\033[1;32mProgram running: " << std::boolalpha << program_running << "\033[0m\n" << std::endl;
 }
 
+void handleToolContactResult(control::ToolContactResult result)
+{
+  // Print the text in green so we see it better
+  std::cout << "\033[1;32mTool contact result: " << toUnderlying(result) << "\033[0m\n" << std::endl;
+  g_tool_contact_result = result;
+  g_tool_contact_result_triggered = true;
+}
+
 int main(int argc, char* argv[])
 {
   urcl::setLogLevel(urcl::LogLevel::INFO);
-
   // Parse the ip arguments if given
   std::string robot_ip = DEFAULT_ROBOT_IP;
   if (argc > 1)
   {
     robot_ip = std::string(argv[1]);
+  }
+
+  // Parse how many seconds to run
+  auto second_to_run = std::chrono::seconds(0);
+  if (argc > 2)
+  {
+    second_to_run = std::chrono::seconds(std::stoi(argv[2]));
   }
 
   // Making the robot ready for the program by:
@@ -76,7 +81,7 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  // Stop program, if there is one running
+  // // Stop program, if there is one running
   if (!g_my_dashboard->commandStop())
   {
     URCL_LOG_ERROR("Could not send stop program command");
@@ -105,7 +110,6 @@ int main(int argc, char* argv[])
   }
 
   // Now the robot is ready to receive a program
-
   std::unique_ptr<ToolCommSetup> tool_comm_setup;
   const bool HEADLESS = true;
   g_my_driver.reset(new UrDriver(robot_ip, SCRIPT_FILE, OUTPUT_RECIPE, INPUT_RECIPE, &handleRobotProgramState, HEADLESS,
@@ -113,18 +117,23 @@ int main(int argc, char* argv[])
   g_my_driver->setKeepaliveCount(5);  // This is for example purposes only. This will make the example running more
                                       // reliable on non-realtime systems. Do not use this in productive applications.
 
+  g_my_driver->registerToolContactResultCallback(&handleToolContactResult);
+
   // Once RTDE communication is started, we have to make sure to read from the interface buffer, as
   // otherwise we will get pipeline overflows. Therefor, do this directly before starting your main
   // loop.
-
   g_my_driver->startRTDECommunication();
 
-  double increment = 0.01;
+  // This will move the robot downward in the z direction of the base until a tool contact is detected or seconds_to_run
+  // is reached
+  std::chrono::duration<double> time_done(0);
+  std::chrono::duration<double> timeout(second_to_run);
+  vector6d_t tcp_speed = { 0.0, 0.0, -0.02, 0.0, 0.0, 0.0 };
+  auto stopwatch_last = std::chrono::steady_clock::now();
+  auto stopwatch_now = stopwatch_last;
+  g_my_driver->startToolContact();
 
-  bool passed_slow_part = false;
-  bool passed_fast_part = false;
-  URCL_LOG_INFO("Start moving the robot");
-  while (!(passed_slow_part && passed_fast_part))
+  while (true)
   {
     // Read latest RTDE package. This will block for a hard-coded timeout (see UrDriver), so the
     // robot will effectively be in charge of setting the frequency of this loop.
@@ -133,39 +142,33 @@ int main(int argc, char* argv[])
     std::unique_ptr<rtde_interface::DataPackage> data_pkg = g_my_driver->getDataPackage();
     if (data_pkg)
     {
-      // Read current joint positions from robot data
-      if (!data_pkg->getData("actual_q", g_joint_positions))
-      {
-        // This throwing should never happen unless misconfigured
-        std::string error_msg = "Did not find 'actual_q' in data sent from robot. This should not happen!";
-        throw std::runtime_error(error_msg);
-      }
-
-      // Simple motion command of last joint
-      if (g_joint_positions[5] > 3)
-      {
-        passed_fast_part = increment > 0.01 || passed_fast_part;
-        increment = -3;  // this large jump will activate speed scaling
-      }
-      else if (g_joint_positions[5] < -3)
-      {
-        passed_slow_part = increment < 0.01 || passed_slow_part;
-        increment = 0.02;
-      }
-      g_joint_positions[5] += increment;
-      bool ret = g_my_driver->writeJointCommand(g_joint_positions, comm::ControlMode::MODE_SERVOJ);
+      bool ret = g_my_driver->writeJointCommand(tcp_speed, comm::ControlMode::MODE_SPEEDL);
       if (!ret)
       {
         URCL_LOG_ERROR("Could not send joint command. Is the robot in remote control?");
         return 1;
       }
-      URCL_LOG_DEBUG("data_pkg:\n%s", data_pkg->toString());
+
+      if (g_tool_contact_result_triggered)
+      {
+        URCL_LOG_INFO("Tool contact result triggered. Received tool contact result %i.",
+                      toUnderlying(g_tool_contact_result));
+        break;
+      }
+
+      if (time_done > timeout && second_to_run.count() != 0)
+      {
+        URCL_LOG_INFO("Timed out before reaching tool contact.");
+        break;
+      }
     }
     else
     {
       URCL_LOG_WARN("Could not get fresh data package from robot");
     }
+
+    stopwatch_now = std::chrono::steady_clock::now();
+    time_done += stopwatch_now - stopwatch_last;
+    stopwatch_last = stopwatch_now;
   }
-  URCL_LOG_INFO("Movement done");
-  return 0;
 }

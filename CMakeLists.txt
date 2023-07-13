@@ -8,6 +8,7 @@ if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE RelWithDebInfo)
 endif()
 
+option(WITH_ASAN "Compile with address sanitizer support" OFF)
 
 ##
 ## Check C++11 support / enable global pedantic and Wall
@@ -46,10 +47,15 @@ add_library(urcl SHARED
     src/rtde/rtde_writer.cpp
     src/default_log_handler.cpp
     src/log.cpp
+    src/helpers.cpp
 )
 add_library(ur_client_library::urcl ALIAS urcl)
 target_compile_options(urcl PRIVATE -Wall -Wextra -Wno-unused-parameter)
 target_compile_options(urcl PUBLIC ${CXX17_FLAG})
+if(WITH_ASAN)
+  target_compile_options(urcl PUBLIC -fsanitize=address)
+  target_link_options(urcl PUBLIC -fsanitize=address)
+endif()
 target_include_directories( urcl PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
@@ -88,6 +94,16 @@ install(EXPORT urcl_targets
   FILE urclTargets.cmake
   NAMESPACE ur_client_library::)
 
+if(CATKIN_PACKAGE_BIN_DESTINATION)
+  install(PROGRAMS scripts/start_ursim.sh
+    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+  )
+else()
+  install(PROGRAMS scripts/start_ursim.sh
+    DESTINATION lib/${PROJECT_NAME}
+  )
+endif()
+
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/ur_client_libraryConfigVersion.cmake VERSION 0.0.3
   COMPATIBILITY SameMajorVersion)
@@ -101,7 +117,7 @@ install(FILES package.xml DESTINATION share/${PROJECT_NAME})
 
 #### Begin import ####
 # Imported from ros-industrial/ros_industrial_cmake_boilerplate
-# https://github.com/ros-industrial/ros_industrial_cmake_boilerplate/blob/master/ros_industrial_cmake_boilerplate/cmake/cmake_tools.cmake
+# https://github.com/ros-industrial/ros_industrial_cmake_boilerplate/blob/59b86df662/ros_industrial_cmake_boilerplate/cmake/cmake_tools.cmake
 # Copyright (C) 2018 by George Cave - gcave@stablecoder.ca
 # Copyright (c) 2020, Southwest Research Institute
 # Licensed under Apache-2.0 license
