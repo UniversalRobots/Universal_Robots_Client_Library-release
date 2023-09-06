@@ -105,14 +105,32 @@ public:
    */
   RTDEClient(std::string robot_ip, comm::INotifier& notifier, const std::string& output_recipe_file,
              const std::string& input_recipe_file, double target_frequency = 0.0);
+
+  /*!
+   * \brief Creates a new RTDEClient object, including a used URStream and Pipeline to handle the
+   * communication with the robot.
+   *
+   * \param robot_ip The IP of the robot
+   * \param notifier The notifier to use in the pipeline
+   * \param output_recipe Vector containing the output recipe
+   * \param input_recipe Vector containing the input recipe
+   * \param target_frequency Frequency to run at. Defaults to 0.0 which means maximum frequency.
+   */
+  RTDEClient(std::string robot_ip, comm::INotifier& notifier, const std::vector<std::string>& output_recipe,
+             const std::vector<std::string>& input_recipe, double target_frequency = 0.0);
   ~RTDEClient();
   /*!
    * \brief Sets up RTDE communication with the robot. The handshake includes negotiation of the
    * used protocol version and setting of input and output recipes.
    *
+   * \param max_num_tries Maximum number of connection attempts before counting the connection as
+   * failed. Unlimited number of attempts when set to 0.
+   * \param reconnection_time time in between connection attempts to the server
+   *
    * \returns Success of the handshake
    */
-  bool init();
+  bool init(const size_t max_num_tries = 0,
+            const std::chrono::milliseconds reconnection_time = std::chrono::seconds(10));
   /*!
    * \brief Triggers the robot to start sending RTDE data packages in the negotiated format.
    *
@@ -208,9 +226,15 @@ private:
   constexpr static const double CB3_MAX_FREQUENCY = 125.0;
   constexpr static const double URE_MAX_FREQUENCY = 500.0;
 
-  std::vector<std::string> readRecipe(const std::string& recipe_file);
+  // Reads output or input recipe from a file
+  std::vector<std::string> readRecipe(const std::string& recipe_file) const;
 
-  void setupCommunication();
+  // Helper function to ensure that timestamp is present in the output recipe. The timestamp is needed to ensure that
+  // the robot is booted.
+  std::vector<std::string> ensureTimestampIsPresent(const std::vector<std::string>& output_recipe) const;
+
+  void setupCommunication(const size_t max_num_tries = 0,
+                          const std::chrono::milliseconds reconnection_time = std::chrono::seconds(10));
   bool negotiateProtocolVersion(const uint16_t protocol_version);
   void queryURControlVersion();
   void setupOutputs(const uint16_t protocol_version);
