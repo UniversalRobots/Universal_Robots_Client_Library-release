@@ -23,6 +23,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <atomic>
+#include <chrono>
 #include <mutex>
 #include <string>
 #include "ur_client_library/log.h"
@@ -56,11 +57,16 @@ public:
   /*!
    * \brief Connects to the configured socket.
    *
+   * \param max_num_tries Maximum number of connection attempts before counting the connection as
+   * failed. Unlimited number of attempts when set to 0.
+   * \param reconnection_time time in between connection attempts to the server
+   *
    * \returns True on success, false if connection could not be established
    */
-  bool connect()
+  bool connect(const size_t max_num_tries = 0,
+               const std::chrono::milliseconds reconnection_time = std::chrono::seconds(10))
   {
-    return TCPSocket::setup(host_, port_);
+    return TCPSocket::setup(host_, port_, max_num_tries, reconnection_time);
   }
 
   /*!
@@ -114,12 +120,6 @@ public:
     return host_;
   }
 
-protected:
-  virtual bool open(int socket_fd, struct sockaddr* address, size_t address_len)
-  {
-    return ::connect(socket_fd, address, address_len) == 0;
-  }
-
 private:
   std::string host_;
   int port_;
@@ -145,7 +145,6 @@ bool URStream<T>::read(uint8_t* buf, const size_t buf_len, size_t& total)
 
   while (remainder > 0 && TCPSocket::read(buf_pos, remainder, read))
   {
-    TCPSocket::setOptions(getSocketFD());
     if (initial)
     {
       remainder = T::HeaderType::getPackageLength(buf);
