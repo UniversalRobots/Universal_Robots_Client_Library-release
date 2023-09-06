@@ -32,6 +32,7 @@
 #include <ur_client_library/exceptions.h>
 #include <chrono>
 #include <thread>
+#include "ur_client_library/comm/tcp_socket.h"
 #include "ur_client_library/ur/version_information.h"
 #define private public
 #include <ur_client_library/ur/dashboard_client.h>
@@ -165,9 +166,71 @@ TEST_F(DashboardClientTest, cb3_version)
   EXPECT_THROW(dashboard_client_->commandIsInRemoteControl(), UrException);
 }
 
+TEST_F(DashboardClientTest, set_receive_timeout)
+{
+  timeval expected_tv;
+  expected_tv.tv_sec = 30;
+  expected_tv.tv_usec = 0.0;
+  dashboard_client_->setReceiveTimeout(expected_tv);
+  EXPECT_TRUE(dashboard_client_->connect());
+
+  // Ensure that the receive timeout hasn't been overwritten
+  timeval actual_tv = dashboard_client_->getConfiguredReceiveTimeout();
+  EXPECT_EQ(expected_tv.tv_sec, actual_tv.tv_sec);
+  EXPECT_EQ(expected_tv.tv_usec, actual_tv.tv_usec);
+
+  bool correct_polyscope_version = true;
+  try
+  {
+    dashboard_client_->assertVersion("5.6.0", "3.13", "test_function");
+  }
+  catch (const UrException& e)
+  {
+    correct_polyscope_version = false;
+  }
+  if (correct_polyscope_version)
+  {
+    EXPECT_TRUE(dashboard_client_->commandGenerateFlightReport(""));
+    // Ensure that the receive timeout hasn't been overwritten
+    actual_tv = dashboard_client_->getConfiguredReceiveTimeout();
+    EXPECT_EQ(expected_tv.tv_sec, actual_tv.tv_sec);
+    EXPECT_EQ(expected_tv.tv_usec, actual_tv.tv_usec);
+
+    EXPECT_TRUE(dashboard_client_->commandGenerateSupportFile("."));
+    // Ensure that the receive timeout hasn't been overwritten
+    actual_tv = dashboard_client_->getConfiguredReceiveTimeout();
+    EXPECT_EQ(expected_tv.tv_sec, actual_tv.tv_sec);
+    EXPECT_EQ(expected_tv.tv_usec, actual_tv.tv_usec);
+  }
+}
+
+TEST_F(DashboardClientTest, connect_non_running_robot)
+{
+  std::unique_ptr<DashboardClient> dashboard_client;
+  // We use an IP address on the integration_test's subnet
+  dashboard_client.reset(new DashboardClient("192.168.56.123"));
+  auto start = std::chrono::system_clock::now();
+  EXPECT_FALSE(dashboard_client->connect(2, std::chrono::milliseconds(500)));
+  auto end = std::chrono::system_clock::now();
+  auto elapsed = end - start;
+  // This is only a rough estimate, obviously.
+  // Since this isn't done on the loopback device, trying to open a socket on a non-existing address
+  // takes considerably longer.
+  EXPECT_LT(elapsed, 2 * comm::TCPSocket::DEFAULT_RECONNECTION_TIME);
+}
+
 int main(int argc, char* argv[])
 {
   ::testing::InitGoogleTest(&argc, argv);
+
+  for (int i = 0; i < argc; i++)
+  {
+    if (std::string(argv[i]) == "--robot_ip" && i + 1 < argc)
+    {
+      ROBOT_IP = argv[i + 1];
+      break;
+    }
+  }
 
   return RUN_ALL_TESTS();
 }

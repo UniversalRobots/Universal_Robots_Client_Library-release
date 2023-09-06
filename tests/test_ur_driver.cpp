@@ -1,5 +1,5 @@
 // -- BEGIN LICENSE BLOCK ----------------------------------------------
-// Copyright 2021 Universal Robots A/S
+// Copyright 2023 Universal Robots A/S
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
@@ -28,35 +28,40 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // -- END LICENSE BLOCK ------------------------------------------------
 
-#include "ur_client_library/default_log_handler.h"
-#include <stdio.h>
+#include <gtest/gtest.h>
 
-namespace urcl
-{
-DefaultLogHandler::DefaultLogHandler() = default;
+#define private public
+#include <ur_client_library/ur/ur_driver.h>
 
-void DefaultLogHandler::log(const char* file, int line, LogLevel loglevel, const char* log)
+using namespace urcl;
+
+TEST(ur_driver, read_non_existing_script_file)
 {
-  switch (loglevel)
-  {
-    case LogLevel::INFO:
-      printf("%s%s %i: %s \n", "INFO ", file, line, log);
-      break;
-    case LogLevel::DEBUG:
-      printf("%s%s %i: %s \n", "DEBUG ", file, line, log);
-      break;
-    case LogLevel::WARN:
-      printf("%s%s %i: %s \n", "WARN ", file, line, log);
-      break;
-    case LogLevel::ERROR:
-      printf("%s%s %i: %s \n", "ERROR ", file, line, log);
-      break;
-    case LogLevel::FATAL:
-      printf("%s%s %i: %s \n", "FATAL ", file, line, log);
-      break;
-    default:
-      break;
-  }
+  const std::string non_existing_script_file = "";
+  EXPECT_THROW(UrDriver::readScriptFile(non_existing_script_file), UrException);
 }
 
-}  // namespace urcl
+TEST(ur_driver, read_existing_script_file)
+{
+  char existing_script_file[] = "urscript.XXXXXX";
+  int fd = mkstemp(existing_script_file);
+  if (fd == -1)
+  {
+    std::cout << "Failed to create temporary files" << std::endl;
+    GTEST_FAIL();
+  }
+  EXPECT_NO_THROW(UrDriver::readScriptFile(existing_script_file));
+
+  // clean up
+  close(fd);
+  unlink(existing_script_file);
+}
+
+// TODO we should add more tests for the UrDriver class.
+
+int main(int argc, char* argv[])
+{
+  ::testing::InitGoogleTest(&argc, argv);
+
+  return RUN_ALL_TESTS();
+}
