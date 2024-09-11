@@ -1,0 +1,193 @@
+ros-noetic-ur-client-library (1.4.0-1focal) focal; urgency=high
+
+  * Ensure that the targets are reachable within the robots limits (#184 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/184>)
+  * Analog domain (#211 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/211>)
+  * Fix clang compilation error (#210 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/210>)
+  * Moved reset of speed slider to correct teardown function, so that it … (#206 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/206>)
+    …resets between each test.
+  * [doc] Fix syntax in example.rst (#207 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/207>)
+  * [doc] Migrate documentation to sphinx (#95 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/95>)
+  * Contributors: Felix Exner, Mads Holm Peters, Remi Siffert, URJala
+
+ -- Felix Exner <exner@fzi.de>  Mon, 09 Sep 2024 22:00:00 -0000
+
+ros-noetic-ur-client-library (1.3.7-1focal) focal; urgency=high
+
+  * [ci] Update CI
+    * Run downstream tests for ICI
+    * Correctly name jobs
+    * Test Jazzy driver
+  * [start_ursim] Add program directory at correct location also when no model is provided
+  * [start_ursim] Always check ursim version for compatibility
+  * [start_ursim] Use a program folder per model
+  * [ci] Update distros for prerelease test
+  * Contributors: Felix Exner, Vincenzo Di Pentima
+
+ -- Felix Exner <exner@fzi.de>  Sun, 02 Jun 2024 22:00:00 -0000
+
+ros-noetic-ur-client-library (1.3.6-1focal) focal; urgency=high
+
+  * Changed spline interpolation to use the last commanded joint velocity… (#195 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/195>)
+  * Contributors: Mads Holm Peters, Rune Søe-Knudsen
+
+ -- Felix Exner <exner@fzi.de>  Wed, 03 Apr 2024 22:00:00 -0000
+
+ros-noetic-ur-client-library (1.3.5-1focal) focal; urgency=high
+
+  * Add support for UR30 in start_ursim.sh (#193 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/193>)
+  * Add header guard to datatypes.h (#189 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/pull/189>)
+  * Remove duplicated entry in clang-format file (#188 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/pull/188>)
+  * Wait after docker kill to prevent name conflicts (#187 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/187>)
+  * Contributors: Felix Exner, Robert Wilbrandt
+
+ -- Felix Exner <exner@fzi.de>  Thu, 22 Feb 2024 23:00:00 -0000
+
+ros-noetic-ur-client-library (1.3.4-1focal) focal; urgency=high
+
+  * Make depreaction warning for keepalive_counter a warning instead of error (#182 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/182>)
+  * Added watchdog configuration for the reverse socket (#178 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/178>)
+  * Add support for ur20 in start_ursim script (#179 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/179>)
+  * Use pre-commit for clang-format (#175 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/175>)
+  * Make tcp_server retry binding the socket (#176 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/176>)
+  * Contributors: Felix Exner, Mads Holm Peters
+
+ -- Felix Exner <exner@fzi.de>  Thu, 21 Sep 2023 22:00:00 -0000
+
+ros-noetic-ur-client-library (1.3.3-1focal) focal; urgency=high
+
+  * Add support for setting socket max num tries and reconnect timeout (#172 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/172>)
+  * Unify socket open (#174 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/174>)
+  * Added handling of spline interpolation with end point velocities (#169 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/169>)
+  * Throws exception if the URScript file doesn't exists (#173 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/173>)
+  * Added check to ensure receive timeout isn't overwritten (#171 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/171>)
+  * Added RTDEClient constructor with vector recipes (#143 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/143>)
+  * Only warn if system is not setup for FIFO scheduling (#170 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/170>)
+  * Ensuring that the Timestamp is always in the output recipe (#168 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/168>)
+  * CI: Add Iron to CI tests (#167 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/167>)
+  * Add issue templates for bugs and features (#166 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/166>)
+  * Updated license (#164 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/164>)
+  * Bugfixes for spline interpolation (#162)
+    
+    Add separate rounding in the conversion from float to int32
+    
+    Add more debug printout for splines
+    
+    Add Copying flight reports if CI fails
+    
+    Update ursim mininum version in start_ursim.sh
+  * Fix the prerelease ci for Melodic (#163 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/163>)
+  * Contributors: Dag-Are Trydal, Felix Exner, Felix Exner (fexner), Mads Holm Peters, Michael Eriksen, RobertWilbrandt, Rune Søe-Knudsen, urmahp, urrsk
+
+ -- Felix Exner <exner@fzi.de>  Mon, 04 Sep 2023 22:00:00 -0000
+
+ros-noetic-ur-client-library (1.3.2-1focal) focal; urgency=high
+
+  * Add a cmake option to activate address sanitizers (#146 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/146>)
+  * Install start ursim (#155 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/155>)
+  * Add spline interpolation on robot (#151 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/151>)
+  * Add codecov.yml to exclude test and examples folders (#152 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/152>)
+  * Make URSim log files available as artifacts also for the CI-industrial (#153 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/153>)
+  * Remove Foxy from CI
+  * Add a script to run the examples instead of run-parts
+  * Add SaveLog command to the Dashboard client
+  * Make URSim log files available as artifacts
+  * Specifically set RTDE pipeline producer to FIFO scheduling (#139 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/139>)
+  * Added support for force_mode, freedrive and tool contact (#138 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/138>)
+  * Docs: Update link to ros_industrial_cmake_boilerplate
+  * Added tests for the comm classes (#129 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/129>)
+  * Changed num_retries from static to an unsigned int (#136 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/136>)
+  * Build downstream humble version from humble branch (#132 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/132>)
+  * Contributors: Felix Exner, Mads Holm Peters, Rune Søe-Knudsen, Robert Wilbrandt
+
+ -- Felix Exner <exner@fzi.de>  Wed, 12 Jul 2023 22:00:00 -0000
+
+ros-noetic-ur-client-library (1.3.1-1focal) focal; urgency=high
+
+  * CI: Add a prerelease check that calls bloom-generate (#134 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/134>)
+  * Contributors: Felix Exner
+
+ -- Felix Exner <exner@fzi.de>  Tue, 29 Nov 2022 23:00:00 -0000
+
+ros-noetic-ur-client-library (1.3.0-1focal) focal; urgency=high
+
+  * Dashboard commands, Docker Image and CI step for running the examples #127 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/127>
+  * Added tests for the rtde interface clasess (#125 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/125>)
+  * Fix unique_ptr type (#124 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/124>)
+  * Fix 'BEGIN_REPLACE' - used in tool_communication (copy #101 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/101>) (#120 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/120>)
+    (cherry picked from commit f7ce9f73181848f3957c660647fac0e5325862b9)
+    Co-authored-by: rxjia <mailto:60809735+rxjia@users.noreply.github.com>
+  * Contributors: Felix Exner, Mads Holm Peters, RobertWilbrandt, Rune Søe-Knudsen, mergify[bot], urmarp, urrsk
+
+ -- Felix Exner <exner@fzi.de>  Sun, 27 Nov 2022 23:00:00 -0000
+
+ros-noetic-ur-client-library (1.2.0-1focal) focal; urgency=high
+
+  * Initialized receive timeout and changed exception to warning (#118 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/118>)
+  * Added tests for the control interface classes (#112 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/112>)
+  * Added note about Polyscope version requirement
+  * Added tcp_offset
+  * Added interface for forwarding script commands to the robot, that is … (#111 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/111>)
+  * Fixed parsing of incomming packages when using rtde protocol v1 (#114 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/114>)
+    The received rtde packages should be parsed slightly different whether we use protocol v1 or v2.
+  * Add codecov step (#116 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/116>)
+  * Added humble build
+  * Fixed downstream test instructions
+  * Update atomicops.h (#117 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/117>)
+    Fix the url in the comment regarding POSIX semaphores to fix error in the CI
+  * Make the read during boot depend on the frequency of the robot controller (#102 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/102>)
+  * Ignore debian folder in check_links (#100 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/100>)
+    Otherwise this job raises an error in the release repository.
+  * Contributors: Felix Exner, Mads Holm Peters, Rune Søe-Knudsen, urmahp, urmarp
+
+ -- Felix Exner <exner@fzi.de>  Mon, 03 Oct 2022 22:00:00 -0000
+
+ros-noetic-ur-client-library (1.1.0-1focal) focal; urgency=high
+
+  * Support starting the driver, before the robot is booted (#98 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/98>)
+  * Clear the queue when consumer reads from it (#96 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/96>)
+  * Fix build with newer glibc
+  * Doxygen check (#77 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/77>)
+  * Added target_frequency to RTDEClient (#85 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/85>)
+  * Removed console_bridge dependency (#74 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/74>)
+  * Added "On behalf of Universal Robots A/S" notice (#81 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/81>)
+    to all files that have been created by FZI
+  * Always install package.xml file (#78 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/78>)
+  * register package with ament index
+  * Corrected smaller doxygen errors
+  * Added rosdoc_lite check
+  * Contributors: Cory Crean, Felix Exner, Jørn Bersvendsen, Mads Holm Peters, Martin Jansa, Stefan Scherzinger
+
+ -- Felix Exner <exner@fzi.de>  Thu, 21 Apr 2022 22:00:00 -0000
+
+ros-noetic-ur-client-library (1.0.0-1focal) focal; urgency=high
+
+  * Added Cartesian streaming interface #75 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/75>
+  * Added trajectory forwarding interface #72 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/72>
+  * Refactored Reverse interface #70 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/70> from fmauch/refactor_reverse_interface
+  * Added option for robot_ip as runtime argument for rtde_test (#71 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/71>)
+  * Added reverse_ip parameter (#52 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/52>)
+  * Move calibration check out of constructor. #65 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/65> from fmauch/calibration_check_optional
+  * Install the resources folder instead of the script file directly (#62 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/62>)
+  * Use a non-blocking tcp server for the ReverseInterface and ScriptSender. #46 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/46> from fmauch/tcp_server
+  * Added LogHandler #40 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/40> from urmahp/logging_feature
+  * Fixed links in README (#35 <https://github.com/UniversalRobots/Universal_Robots_Client_Library/issues/35>)
+  * Contributors: Felix Exner, G.A. vd. Hoorn, JS00000, Lennart Puck, Mads Holm Peters, Tristan Schnell
+
+ -- Felix Exner <exner@fzi.de>  Thu, 17 Jun 2021 22:00:00 -0000
+
+ros-noetic-ur-client-library (0.1.1-1focal) focal; urgency=high
+
+  * readme: missing whitespace
+  * Further elaborated license statements in README
+  * Install package.xml when built with catkin support
+  * Contributors: Felix Exner, G.A. vd. Hoorn
+
+ -- Felix Exner <exner@fzi.de>  Mon, 14 Sep 2020 22:00:00 -0000
+
+ros-noetic-ur-client-library (0.1.0-1focal) focal; urgency=high
+
+  * initial standalone release
+
+ -- Felix Exner <exner@fzi.de>  Thu, 10 Sep 2020 22:00:00 -0000
+
+
