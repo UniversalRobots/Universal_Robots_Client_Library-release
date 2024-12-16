@@ -58,10 +58,9 @@ urcl::UrDriver::UrDriver(const std::string& robot_ip, const std::string& script_
                          std::unique_ptr<ToolCommSetup> tool_comm_setup, const uint32_t reverse_port,
                          const uint32_t script_sender_port, int servoj_gain, double servoj_lookahead_time,
                          bool non_blocking_read, const std::string& reverse_ip, const uint32_t trajectory_port,
-                         const uint32_t script_command_port, double force_mode_damping, double force_mode_gain_scaling)
+                         const uint32_t script_command_port)
   : servoj_gain_(servoj_gain)
   , servoj_lookahead_time_(servoj_lookahead_time)
-  , step_time_(std::chrono::milliseconds(8))
   , handle_program_state_(handle_program_state)
   , robot_ip_(robot_ip)
 {
@@ -78,13 +77,8 @@ urcl::UrDriver::UrDriver(const std::string& robot_ip, const std::string& script_
   non_blocking_read_ = non_blocking_read;
   get_packet_timeout_ = non_blocking_read_ ? 0 : 100;
 
-  if (!rtde_client_->init())
-  {
-    throw UrException("Initialization of RTDE client went wrong.");
-  }
-
-  rtde_frequency_ = rtde_client_->getMaxFrequency();
-  step_time_ = std::chrono::milliseconds(1000 / rtde_frequency_);
+  initRTDE();
+  setupReverseInterface(reverse_port);
 
   // Figure out the ip automatically if the user didn't provide it
   std::string local_ip = reverse_ip.empty() ? rtde_client_->getIP() : reverse_ip;
@@ -129,45 +123,6 @@ urcl::UrDriver::UrDriver(const std::string& robot_ip, const std::string& script_
                  std::to_string(script_command_port));
   }
 
-  while (prog.find(FORCE_MODE_SET_DAMPING_REPLACE) != std::string::npos)
-  {
-    if (force_mode_damping < 0 || force_mode_damping > 1)
-    {
-      std::stringstream ss;
-      ss << "Force mode damping, should be between 0 and 1, but it is " << force_mode_damping;
-      force_mode_damping = 0.025;
-      ss << " setting it to default " << force_mode_damping;
-      URCL_LOG_ERROR(ss.str().c_str());
-    }
-    prog.replace(prog.find(FORCE_MODE_SET_DAMPING_REPLACE), FORCE_MODE_SET_DAMPING_REPLACE.length(),
-                 std::to_string(force_mode_damping));
-  }
-
-  while (prog.find(FORCE_MODE_SET_GAIN_SCALING_REPLACE) != std::string::npos)
-  {
-    if (robot_version_.major < 5)
-    {
-      // force_mode_set_gain_scaling is only available for e-series and is therefore removed, if the robot is not
-      // e-series
-      std::stringstream ss;
-      ss << "force_mode_set_gain_scaling(" << FORCE_MODE_SET_GAIN_SCALING_REPLACE << ")";
-      prog.replace(prog.find(ss.str()), ss.str().length(), "");
-    }
-    else
-    {
-      if (force_mode_gain_scaling < 0 || force_mode_gain_scaling > 2)
-      {
-        std::stringstream ss;
-        ss << "Force mode gain scaling, should be between 0 and 2, but it is " << force_mode_gain_scaling;
-        force_mode_gain_scaling = 0.5;
-        ss << " setting it to default " << force_mode_gain_scaling;
-        URCL_LOG_ERROR(ss.str().c_str());
-      }
-      prog.replace(prog.find(FORCE_MODE_SET_GAIN_SCALING_REPLACE), FORCE_MODE_SET_GAIN_SCALING_REPLACE.length(),
-                   std::to_string(force_mode_gain_scaling));
-    }
-  }
-
   robot_version_ = rtde_client_->getVersion();
 
   std::stringstream begin_replace;
@@ -210,11 +165,25 @@ urcl::UrDriver::UrDriver(const std::string& robot_ip, const std::string& script_
     URCL_LOG_DEBUG("Created script sender");
   }
 
-  reverse_interface_.reset(new control::ReverseInterface(reverse_port, handle_program_state, step_time_));
   trajectory_interface_.reset(new control::TrajectoryPointInterface(trajectory_port));
   script_command_interface_.reset(new control::ScriptCommandInterface(script_command_port));
 
   URCL_LOG_DEBUG("Initialization done");
+}
+
+urcl::UrDriver::UrDriver(const std::string& robot_ip, const std::string& script_file,
+                         const std::string& output_recipe_file, const std::string& input_recipe_file,
+                         std::function<void(bool)> handle_program_state, bool headless_mode,
+                         std::unique_ptr<ToolCommSetup> tool_comm_setup, const uint32_t reverse_port,
+                         const uint32_t script_sender_port, int servoj_gain, double servoj_lookahead_time,
+                         bool non_blocking_read, const std::string& reverse_ip, const uint32_t trajectory_port,
+                         const uint32_t script_command_port, double force_mode_damping, double force_mode_gain_scaling)
+  : UrDriver(robot_ip, script_file, output_recipe_file, input_recipe_file, handle_program_state, headless_mode,
+             std::move(tool_comm_setup), reverse_port, script_sender_port, servoj_gain, servoj_lookahead_time,
+             non_blocking_read, reverse_ip, trajectory_port, script_command_port)
+{
+  force_mode_damping_factor_ = force_mode_damping;
+  force_mode_gain_scale_factor_ = force_mode_gain_scaling;
 }
 
 urcl::UrDriver::UrDriver(const std::string& robot_ip, const std::string& script_file,
@@ -378,10 +347,19 @@ bool UrDriver::setToolVoltage(const ToolVoltage voltage)
     return sendScript(cmd.str());
   }
 }
-
+// Function for e-series robots (Needs both damping factor and gain scaling factor)
 bool UrDriver::startForceMode(const vector6d_t& task_frame, const vector6uint32_t& selection_vector,
-                              const vector6d_t& wrench, const unsigned int type, const vector6d_t& limits)
+                              const vector6d_t& wrench, const unsigned int type, const vector6d_t& limits,
+                              double damping_factor, double gain_scaling_factor)
 {
+  if (robot_version_.major < 5)
+  {
+    std::stringstream ss;
+    ss << "Force mode gain scaling factor cannot be set on a CB3 robot.";
+    URCL_LOG_ERROR(ss.str().c_str());
+    VersionInformation req_version = VersionInformation::fromString("5.0.0.0");
+    throw IncompatibleRobotVersion(ss.str(), req_version, robot_version_);
+  }
   // Test that the type is either 1, 2 or 3.
   switch (type)
   {
@@ -395,25 +373,116 @@ bool UrDriver::startForceMode(const vector6d_t& task_frame, const vector6uint32_
       std::stringstream ss;
       ss << "The type should be 1, 2 or 3. The type is " << type;
       URCL_LOG_ERROR(ss.str().c_str());
-      return false;
+      throw InvalidRange(ss.str().c_str());
   }
   for (unsigned int i = 0; i < selection_vector.size(); ++i)
   {
     if (selection_vector[i] > 1)
     {
-      URCL_LOG_ERROR("The selection vector should only consist of 0's and 1's");
-      return false;
+      std::stringstream ss;
+      ss << "The selection vector should only consist of 0's and 1's";
+      URCL_LOG_ERROR(ss.str().c_str());
+      throw InvalidRange(ss.str().c_str());
     }
+  }
+
+  if (damping_factor > 1 || damping_factor < 0)
+  {
+    std::stringstream ss;
+    ss << "The force mode damping factor should be between 0 and 1, both inclusive.";
+    URCL_LOG_ERROR(ss.str().c_str());
+    throw InvalidRange(ss.str().c_str());
+  }
+
+  if (gain_scaling_factor > 2 || gain_scaling_factor < 0)
+  {
+    std::stringstream ss;
+    ss << "The force mode gain scaling factor should be between 0 and 2, both inclusive.";
+    URCL_LOG_ERROR(ss.str().c_str());
+    throw InvalidRange(ss.str().c_str());
   }
 
   if (script_command_interface_->clientConnected())
   {
-    return script_command_interface_->startForceMode(&task_frame, &selection_vector, &wrench, type, &limits);
+    return script_command_interface_->startForceMode(&task_frame, &selection_vector, &wrench, type, &limits,
+                                                     damping_factor, gain_scaling_factor);
   }
   else
   {
     URCL_LOG_ERROR("Script command interface is not running. Unable to start Force mode.");
     return false;
+  }
+}
+
+// Function for CB3 robots (CB3 robots cannot use gain scaling)
+bool UrDriver::startForceMode(const vector6d_t& task_frame, const vector6uint32_t& selection_vector,
+                              const vector6d_t& wrench, const unsigned int type, const vector6d_t& limits,
+                              double damping_factor)
+{
+  if (robot_version_.major >= 5)
+  {
+    std::stringstream ss;
+    ss << "You should also specify a force mode gain scaling factor to activate force mode on an e-series robot.";
+    URCL_LOG_ERROR(ss.str().c_str());
+    throw MissingArgument(ss.str(), "startForceMode", "gain_scaling_factor", 0.5);
+  }
+  // Test that the type is either 1, 2 or 3.
+  switch (type)
+  {
+    case 1:
+      break;
+    case 2:
+      break;
+    case 3:
+      break;
+    default:
+      std::stringstream ss;
+      ss << "The type should be 1, 2 or 3. The type is " << type;
+      URCL_LOG_ERROR(ss.str().c_str());
+      throw InvalidRange(ss.str().c_str());
+  }
+  for (unsigned int i = 0; i < selection_vector.size(); ++i)
+  {
+    if (selection_vector[i] > 1)
+    {
+      std::stringstream ss;
+      ss << "The selection vector should only consist of 0's and 1's";
+      URCL_LOG_ERROR(ss.str().c_str());
+      throw InvalidRange(ss.str().c_str());
+    }
+  }
+
+  if (damping_factor > 1 || damping_factor < 0)
+  {
+    std::stringstream ss;
+    ss << "The force mode damping factor should be between 0 and 1, both inclusive.";
+    URCL_LOG_ERROR(ss.str().c_str());
+    throw InvalidRange(ss.str().c_str());
+  }
+
+  if (script_command_interface_->clientConnected())
+  {
+    return script_command_interface_->startForceMode(&task_frame, &selection_vector, &wrench, type, &limits,
+                                                     damping_factor, 0);
+  }
+  else
+  {
+    URCL_LOG_ERROR("Script command interface is not running. Unable to start Force mode.");
+    return false;
+  }
+}
+
+bool UrDriver::startForceMode(const vector6d_t& task_frame, const vector6uint32_t& selection_vector,
+                              const vector6d_t& wrench, const unsigned int type, const vector6d_t& limits)
+{
+  if (robot_version_.major < 5)
+  {
+    return startForceMode(task_frame, selection_vector, wrench, type, limits, force_mode_damping_factor_);
+  }
+  else
+  {
+    return startForceMode(task_frame, selection_vector, wrench, type, limits, force_mode_damping_factor_,
+                          force_mode_gain_scale_factor_);
   }
 }
 
@@ -542,9 +611,8 @@ bool UrDriver::sendScript(const std::string& program)
 {
   if (secondary_stream_ == nullptr)
   {
-    throw std::runtime_error("Sending script to robot requested while there is no primary interface established. "
-                             "This "
-                             "should not happen.");
+    throw std::runtime_error("Sending script to robot requested while there is no secondary interface established. "
+                             "This should not happen.");
   }
 
   // urscripts (snippets) must end with a newline, or otherwise the controller's runtime will
@@ -556,12 +624,28 @@ bool UrDriver::sendScript(const std::string& program)
   const uint8_t* data = reinterpret_cast<const uint8_t*>(program_with_newline.c_str());
   size_t written;
 
-  if (secondary_stream_->write(data, len, written))
+  const auto send_script_contents = [this, program_with_newline, data, len,
+                                     &written](const std::string&& description) -> bool {
+    if (secondary_stream_->write(data, len, written))
+    {
+      URCL_LOG_DEBUG("Sent program to robot:\n%s", program_with_newline.c_str());
+      return true;
+    }
+    const std::string error_message = "Could not send program to robot: " + description;
+    URCL_LOG_ERROR(error_message.c_str());
+    return false;
+  };
+
+  if (send_script_contents("initial attempt"))
   {
-    URCL_LOG_DEBUG("Sent program to robot:\n%s", program_with_newline.c_str());
     return true;
   }
-  URCL_LOG_ERROR("Could not send program to robot");
+
+  if (reconnectSecondaryStream())
+  {
+    return send_script_contents("after reconnecting secondary stream");
+  }
+
   return false;
 }
 
@@ -578,6 +662,19 @@ bool UrDriver::sendRobotProgram()
   }
 }
 
+bool UrDriver::reconnectSecondaryStream()
+{
+  URCL_LOG_DEBUG("Closing secondary stream...");
+  secondary_stream_->close();
+  if (secondary_stream_->connect())
+  {
+    URCL_LOG_DEBUG("Secondary stream connected");
+    return true;
+  }
+  URCL_LOG_ERROR("Failed to reconnect secondary stream!");
+  return false;
+}
+
 std::vector<std::string> UrDriver::getRTDEOutputRecipe()
 {
   return rtde_client_->getOutputRecipe();
@@ -591,6 +688,38 @@ void UrDriver::setKeepaliveCount(const uint32_t count)
                 "read timeout in the write commands directly. This keepalive count will overwrite the timeout passed "
                 "to the write functions.");
   reverse_interface_->setKeepaliveCount(count);
+}
+
+void UrDriver::resetRTDEClient(const std::vector<std::string>& output_recipe,
+                               const std::vector<std::string>& input_recipe, double target_frequency,
+                               bool ignore_unavailable_outputs)
+{
+  rtde_client_.reset(new rtde_interface::RTDEClient(robot_ip_, notifier_, output_recipe, input_recipe, target_frequency,
+                                                    ignore_unavailable_outputs));
+  initRTDE();
+}
+
+void UrDriver::resetRTDEClient(const std::string& output_recipe_filename, const std::string& input_recipe_filename,
+                               double target_frequency, bool ignore_unavailable_outputs)
+{
+  rtde_client_.reset(new rtde_interface::RTDEClient(robot_ip_, notifier_, output_recipe_filename, input_recipe_filename,
+                                                    target_frequency, ignore_unavailable_outputs));
+  initRTDE();
+}
+
+void UrDriver::initRTDE()
+{
+  if (!rtde_client_->init())
+  {
+    throw UrException("Initialization of RTDE client went wrong.");
+  }
+}
+
+void UrDriver::setupReverseInterface(const uint32_t reverse_port)
+{
+  auto rtde_frequency = rtde_client_->getTargetFrequency();
+  auto step_time = std::chrono::milliseconds(static_cast<int>(1000 / rtde_frequency));
+  reverse_interface_.reset(new control::ReverseInterface(reverse_port, handle_program_state_, step_time));
 }
 
 }  // namespace urcl
