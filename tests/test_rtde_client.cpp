@@ -26,11 +26,17 @@
  */
 //----------------------------------------------------------------------
 
+#include <algorithm>
 #include <gtest/gtest.h>
+#include <algorithm>
 #include <cmath>
+#include <optional>
+#include <unordered_map>
+#include <utility>
 #include "ur_client_library/exceptions.h"
 
 #include <ur_client_library/rtde/rtde_client.h>
+#include <ur_client_library/ur/version_information.h>
 
 using namespace urcl;
 
@@ -52,6 +58,7 @@ protected:
   }
 
   std::string output_recipe_file_ = "resources/rtde_output_recipe.txt";
+  std::string exhaustive_output_recipe_file_ = "resources/exhaustive_rtde_output_recipe.txt";
   std::string input_recipe_file_ = "resources/rtde_input_recipe.txt";
   comm::INotifier notifier_;
   std::unique_ptr<rtde_interface::RTDEClient> client_;
@@ -135,11 +142,13 @@ TEST_F(RTDEClientTest, empty_recipe_file)
 TEST_F(RTDEClientTest, invalid_target_frequency)
 {
   // Setting target frequency below 0 or above 500, should throw an exception
-  client_.reset(new rtde_interface::RTDEClient(ROBOT_IP, notifier_, output_recipe_file_, input_recipe_file_, -1.0));
+  client_.reset(
+      new rtde_interface::RTDEClient(ROBOT_IP, notifier_, output_recipe_file_, input_recipe_file_, -1.0, false));
 
   EXPECT_THROW(client_->init(), UrException);
 
-  client_.reset(new rtde_interface::RTDEClient(ROBOT_IP, notifier_, output_recipe_file_, input_recipe_file_, 1000));
+  client_.reset(
+      new rtde_interface::RTDEClient(ROBOT_IP, notifier_, output_recipe_file_, input_recipe_file_, 1000, false));
 
   EXPECT_THROW(client_->init(), UrException);
 }
@@ -158,7 +167,7 @@ TEST_F(RTDEClientTest, unconfigured_target_frequency)
 
 TEST_F(RTDEClientTest, set_target_frequency)
 {
-  client_.reset(new rtde_interface::RTDEClient(ROBOT_IP, notifier_, output_recipe_file_, input_recipe_file_, 1));
+  client_.reset(new rtde_interface::RTDEClient(ROBOT_IP, notifier_, output_recipe_file_, input_recipe_file_, 1, false));
   client_->init();
 
   // Maximum frequency should still be equal to the robot's maximum frequency
@@ -360,6 +369,46 @@ TEST_F(RTDEClientTest, connect_non_running_robot)
   // Since this isn't done on the loopback device, trying to open a socket on a non-existing address
   // takes considerably longer.
   EXPECT_LT(elapsed, 2 * comm::TCPSocket::DEFAULT_RECONNECTION_TIME);
+}
+
+TEST_F(RTDEClientTest, check_all_rtde_output_variables_exist)
+{
+  client_->init();
+
+  // Ignore unknown output variables to account for variables not available in old urcontrol versions.
+  client_.reset(new rtde_interface::RTDEClient(ROBOT_IP, notifier_, exhaustive_output_recipe_file_, input_recipe_file_,
+                                               0.0, true));
+
+  EXPECT_NO_THROW(client_->init());
+  client_->start();
+
+  // Test that we can receive and parse the timestamp from the received package to prove the setup was successful
+  const std::chrono::milliseconds read_timeout{ 100 };
+  std::unique_ptr<rtde_interface::DataPackage> data_pkg = client_->getDataPackage(read_timeout);
+
+  if (data_pkg == nullptr)
+  {
+    std::cout << "Failed to get data package from robot" << std::endl;
+    GTEST_FAIL();
+  }
+
+  double timestamp;
+  EXPECT_TRUE(data_pkg->getData("timestamp", timestamp));
+
+  client_->pause();
+}
+
+TEST_F(RTDEClientTest, check_unknown_rtde_output_variable)
+{
+  client_->init();
+
+  std::vector<std::string> incorrect_output_recipe = client_->getOutputRecipe();
+  incorrect_output_recipe.push_back("unknown_rtde_variable");
+
+  client_.reset(new rtde_interface::RTDEClient(ROBOT_IP, notifier_, incorrect_output_recipe, resources_input_recipe_,
+                                               0.0, false));
+
+  EXPECT_THROW(client_->init(), UrException);
 }
 
 int main(int argc, char* argv[])
