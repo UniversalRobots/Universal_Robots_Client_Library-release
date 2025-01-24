@@ -29,16 +29,36 @@
 #include <ur_client_library/control/trajectory_point_interface.h>
 #include <ur_client_library/exceptions.h>
 #include <math.h>
+#include <stdexcept>
 
 namespace urcl
 {
 namespace control
 {
+
+std::string trajectoryResultToString(const TrajectoryResult result)
+{
+  switch (result)
+  {
+    case TrajectoryResult::TRAJECTORY_RESULT_UNKNOWN:
+      return "UNKNOWN";
+    case TrajectoryResult::TRAJECTORY_RESULT_SUCCESS:
+      return "SUCCESS";
+    case TrajectoryResult::TRAJECTORY_RESULT_CANCELED:
+      return "CANCELED";
+    case TrajectoryResult::TRAJECTORY_RESULT_FAILURE:
+      return "FAILURE";
+    default:
+      throw std::invalid_argument("Illegal Trajectory result");
+  }
+}
+
 TrajectoryPointInterface::TrajectoryPointInterface(uint32_t port) : ReverseInterface(port, [](bool foo) { return foo; })
 {
 }
 
-bool TrajectoryPointInterface::writeTrajectoryPoint(const vector6d_t* positions, const float goal_time,
+bool TrajectoryPointInterface::writeTrajectoryPoint(const vector6d_t* positions, const float acceleration,
+                                                    const float velocity, const float goal_time,
                                                     const float blend_radius, const bool cartesian)
 {
   if (client_fd_ == -1)
@@ -56,15 +76,23 @@ bool TrajectoryPointInterface::writeTrajectoryPoint(const vector6d_t* positions,
       val = htobe32(val);
       b_pos += append(b_pos, val);
     }
+    for (size_t i = 0; i < positions->size(); ++i)
+    {
+      int32_t val = static_cast<int32_t>(round(velocity * MULT_JOINTSTATE));
+      val = htobe32(val);
+      b_pos += append(b_pos, val);
+    }
+    for (size_t i = 0; i < positions->size(); ++i)
+    {
+      int32_t val = static_cast<int32_t>(round(acceleration * MULT_JOINTSTATE));
+      val = htobe32(val);
+      b_pos += append(b_pos, val);
+    }
   }
   else
   {
     b_pos += 6 * sizeof(int32_t);
   }
-
-  // Fill in velocity and acceleration, not used for this point type
-  b_pos += 6 * sizeof(int32_t);
-  b_pos += 6 * sizeof(int32_t);
 
   int32_t val = static_cast<int32_t>(round(goal_time * MULT_TIME));
   val = htobe32(val);
@@ -89,6 +117,12 @@ bool TrajectoryPointInterface::writeTrajectoryPoint(const vector6d_t* positions,
   size_t written;
 
   return server_.write(client_fd_, buffer, sizeof(buffer), written);
+}
+
+bool TrajectoryPointInterface::writeTrajectoryPoint(const vector6d_t* positions, const float goal_time,
+                                                    const float blend_radius, const bool cartesian)
+{
+  return writeTrajectoryPoint(positions, 1.4, 1.05, goal_time, blend_radius, cartesian);
 }
 
 bool TrajectoryPointInterface::writeTrajectorySplinePoint(const vector6d_t* positions, const vector6d_t* velocities,
@@ -182,8 +216,12 @@ void TrajectoryPointInterface::connectionCallback(const int filedescriptor)
 
 void TrajectoryPointInterface::disconnectionCallback(const int filedescriptor)
 {
-  URCL_LOG_DEBUG("Connection to trajectory interface dropped.", filedescriptor);
+  URCL_LOG_DEBUG("Connection to trajectory interface dropped.");
   client_fd_ = -1;
+  if (disconnection_callback_ != nullptr)
+  {
+    disconnection_callback_(filedescriptor);
+  }
 }
 
 void TrajectoryPointInterface::messageCallback(const int filedescriptor, char* buffer, int nbytesrecv)
