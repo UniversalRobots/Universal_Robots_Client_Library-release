@@ -2,14 +2,18 @@
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>ur_client_library</name>
-  <version>1.5.0</version>
+  <version>1.6.0</version>
   <description>Standalone C++ library for accessing Universal Robots interfaces. This has been forked off the ur_robot_driver.</description>
   <author>Thomas Timm Andersen</author>
   <author>Simon Rasmussen</author>
   <author>Felix Exner</author>
   <author>Lea Steffen</author>
   <author>Tristan Schnell</author>
-  <maintainer email="exner@fzi.de">Felix Exner</maintainer>
+
+  <maintainer email="feex@universal-robots.com">Felix Exner</maintainer>
+  <maintainer email="rsk@universal-robots.com">Rune Søe-Knudsen</maintainer>
+  <maintainer email="ros@universal-robots.com">Universal Robots A/S</maintainer>
+  
   <license file="LICENSE_apache_2_0">Apache-2.0</license>
   <license file="include/ur_client_library/queue/LICENSE.md">BSD-2-Clause</license>
   <license file="include/ur_client_library/queue/atomicops.h">Zlib</license>
