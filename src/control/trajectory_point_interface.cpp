@@ -30,6 +30,7 @@
 #include <ur_client_library/exceptions.h>
 #include <math.h>
 #include <stdexcept>
+#include "ur_client_library/comm/socket_t.h"
 
 namespace urcl
 {
@@ -200,9 +201,9 @@ bool TrajectoryPointInterface::writeTrajectorySplinePoint(const vector6d_t* posi
   return server_.write(client_fd_, buffer, sizeof(buffer), written);
 }
 
-void TrajectoryPointInterface::connectionCallback(const int filedescriptor)
+void TrajectoryPointInterface::connectionCallback(const socket_t filedescriptor)
 {
-  if (client_fd_ < 0)
+  if (client_fd_ == INVALID_SOCKET)
   {
     URCL_LOG_DEBUG("Robot connected to trajectory interface.");
     client_fd_ = filedescriptor;
@@ -214,17 +215,17 @@ void TrajectoryPointInterface::connectionCallback(const int filedescriptor)
   }
 }
 
-void TrajectoryPointInterface::disconnectionCallback(const int filedescriptor)
+void TrajectoryPointInterface::disconnectionCallback(const socket_t filedescriptor)
 {
   URCL_LOG_DEBUG("Connection to trajectory interface dropped.");
-  client_fd_ = -1;
   if (disconnection_callback_ != nullptr)
   {
     disconnection_callback_(filedescriptor);
   }
+  client_fd_ = INVALID_SOCKET;
 }
 
-void TrajectoryPointInterface::messageCallback(const int filedescriptor, char* buffer, int nbytesrecv)
+void TrajectoryPointInterface::messageCallback(const socket_t filedescriptor, char* buffer, int nbytesrecv)
 {
   if (nbytesrecv == 4)
   {

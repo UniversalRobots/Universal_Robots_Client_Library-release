@@ -31,9 +31,6 @@
 #include <gtest/gtest.h>
 
 #include <ur_client_library/ur/dashboard_client.h>
-#include <thread>
-#include "ur_client_library/log.h"
-#define private public
 #include <ur_client_library/ur/ur_driver.h>
 #include <ur_client_library/example_robot_wrapper.h>
 
@@ -85,8 +82,13 @@ TEST_F(UrDriverTest, read_non_existing_script_file)
 TEST_F(UrDriverTest, read_existing_script_file)
 {
   char existing_script_file[] = "urscript.XXXXXX";
-  int fd = mkstemp(existing_script_file);
-  if (fd == -1)
+#ifdef _WIN32
+#  define mkstemp _mktemp_s
+#endif
+  std::ignore = mkstemp(existing_script_file);
+
+  std::ofstream ofs(existing_script_file);
+  if (ofs.bad())
   {
     std::cout << "Failed to create temporary files" << std::endl;
     GTEST_FAIL();
@@ -94,8 +96,8 @@ TEST_F(UrDriverTest, read_existing_script_file)
   EXPECT_NO_THROW(UrDriver::readScriptFile(existing_script_file));
 
   // clean up
-  close(fd);
-  unlink(existing_script_file);
+  ofs.close();
+  std::remove(existing_script_file);
 }
 
 TEST_F(UrDriverTest, robot_receive_timeout)
@@ -232,14 +234,14 @@ TEST_F(UrDriverTest, target_outside_limits_pose)
 
 TEST_F(UrDriverTest, send_robot_program_retry_on_failure)
 {
-  // Check that sendRobotProgram is robust to the secondary stream being disconnected. This is what happens when
+  // Check that sendRobotProgram is robust to the primary stream being disconnected. This is what happens when
   // switching from Remote to Local and back to Remote mode for example.
 
   // To be able to re-send the robot program we'll have to make sure it isn't running
   g_my_robot->ur_driver_->stopControl();
   g_my_robot->waitForProgramNotRunning();
 
-  g_my_robot->ur_driver_->secondary_stream_->close();
+  g_my_robot->ur_driver_->stopPrimaryClientCommunication();
 
   EXPECT_TRUE(g_my_robot->resendRobotProgram());
 
@@ -256,7 +258,6 @@ TEST_F(UrDriverTest, reset_rtde_client)
 
 TEST_F(UrDriverTest, read_error_code)
 {
-  g_my_robot->ur_driver_->startPrimaryClientCommunication();
   // Wait until we actually received a package
   std::this_thread::sleep_for(std::chrono::milliseconds(1000));
   std::stringstream cmd;
