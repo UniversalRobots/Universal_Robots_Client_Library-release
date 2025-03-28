@@ -41,6 +41,8 @@
 #  ifdef ERROR
 #    undef ERROR
 #  endif  // ERROR
+#else
+#  include <sys/time.h>
 #endif
 
 namespace urcl
@@ -120,6 +122,13 @@ class TimeoutException : public UrException
 {
 public:
   explicit TimeoutException() = delete;
+  explicit TimeoutException(const std::string& text, std::chrono::milliseconds timeout) : std::runtime_error(text)
+  {
+    std::stringstream ss;
+    ss << text << "(Configured timeout: " << timeout.count() / 1000.0 << " sec)";
+    text_ = ss.str();
+  }
+
   explicit TimeoutException(const std::string& text, timeval timeout) : std::runtime_error(text)
   {
     std::stringstream ss;

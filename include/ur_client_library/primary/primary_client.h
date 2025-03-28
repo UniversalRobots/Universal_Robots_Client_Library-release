@@ -31,6 +31,7 @@
 #ifndef UR_CLIENT_LIBRARY_PRIMARY_CLIENT_H_INCLUDED
 #define UR_CLIENT_LIBRARY_PRIMARY_CLIENT_H_INCLUDED
 
+#include <chrono>
 #include <memory>
 #include <deque>
 
@@ -88,6 +89,134 @@ public:
   bool sendScript(const std::string& program);
 
   bool checkCalibration(const std::string& checksum);
+
+  /*!
+   * \brief Commands the robot to power on.
+   *
+   * \param validate If true, the function will block until the robot is powered on or the timeout
+   * passed by.
+   * \param timeout The maximum time to wait for the robot to confirm the power on command.
+   *
+   * \throws urcl::UrException if the command cannot be sent to the robot.
+   * \throws urcl::TimeoutException if the robot doesn't power on within the given timeout.
+   */
+  void commandPowerOn(const bool validate = true, const std::chrono::milliseconds timeout = std::chrono::seconds(30));
+
+  /*!
+   * \brief Commands the robot to power off.
+   *
+   * \param validate If true, the function will block until the robot is powered off or the timeout
+   * passed by.
+   * \param timeout The maximum time to wait for the robot to confirm the power off command.
+   *
+   * \throws urcl::UrException if the command cannot be sent to the robot.
+   * \throws urcl::TimeoutException if the robot doesn't power off within the given timeout.
+   */
+  void commandPowerOff(const bool validate = true, const std::chrono::milliseconds timeout = std::chrono::seconds(30));
+
+  /*!
+   * \brief Commands the robot to release the brakes
+   *
+   * \param validate If true, the function will block until the robot is running or the timeout
+   * passed by.
+   * \param timeout The maximum time to wait for the robot to confirm it is running.
+   *
+   * \throws urcl::UrException if the command cannot be sent to the robot.
+   * \throws urcl::TimeoutException if the robot doesn't release the brakes within the given
+   * timeout.
+   */
+  void commandBrakeRelease(const bool validate = true,
+                           const std::chrono::milliseconds timeout = std::chrono::seconds(30));
+
+  /*!
+   * \brief Commands the robot to unlock the protective stop
+   *
+   * \param validate If true, the function will block until the protective stop is released or the
+   * timeout passed by.
+   * \param timeout The maximum time to wait for the robot to confirm it is no longer protective
+   * stopped.
+   *
+   * \throws urcl::UrException if the command cannot be sent to the robot.
+   * \throws urcl::TimeoutException if the robot doesn't unlock the protective stop within the
+   * given timeout.
+   */
+  void commandUnlockProtectiveStop(const bool validate = true,
+                                   const std::chrono::milliseconds timeout = std::chrono::milliseconds(5000));
+
+  /*!
+   * /brief Stop execution of a running or paused program
+   *
+   * \param validate If true, the function will block until the robot has stopped or the timeout
+   * passed by.
+   * \param timeout The maximum time to wait for the robot to stop the program.
+   *
+   * \throws urcl::UrException if the command cannot be sent to the robot.
+   * \throws urcl::TimeoutException if the robot doesn't stop the program within the given timeout.
+   */
+  void commandStop(const bool validate = true, const std::chrono::milliseconds timeout = std::chrono::seconds(2));
+
+  /*!
+   * \brief Get the latest robot mode.
+   *
+   * The robot mode will be updated in the background. This will always show the latest received
+   * robot mode independent of the time that has passed since receiving it.
+   */
+  RobotMode getRobotMode()
+  {
+    std::shared_ptr<RobotModeData> robot_mode_data = consumer_->getRobotModeData();
+    if (robot_mode_data == nullptr)
+    {
+      return RobotMode::UNKNOWN;
+    }
+    return static_cast<RobotMode>(consumer_->getRobotModeData()->robot_mode_);
+  }
+
+  /*!
+   * \brief Get the robot's software version as Major.Minor.Bugfix
+   *
+   * This function by default blocks until a VersionMessage has been received and returns that
+   * version information. If there is an older version message that has been received, this is
+   * returned directly.
+   *
+   * \param blocking If true, the function will block until there is a valid version information
+   * received by the client or the timeout passed by.
+   * \param timeout The maximum time to wait for a valid version message.
+   *
+   * \throws urcl::TimeoutException if no message was received until the given timeout passed by.
+   *
+   */
+  std::shared_ptr<VersionInformation>
+  getRobotVersion(bool wait_for_message = true, const std::chrono::milliseconds timeout = std::chrono::seconds(2));
+
+  /*!
+   * \brief Get the latest robot mode data.
+   *
+   * The robot's mode data will be updated in the background. This will always show the latest received
+   * state independent of the time that has passed since receiving it. The return value of this
+   * will be a nullptr if no data has been received yet.
+   */
+  std::shared_ptr<RobotModeData> getRobotModeData()
+  {
+    return consumer_->getRobotModeData();
+  }
+
+  /*!
+   * \brief Query if the robot is protective stopped.
+   *
+   * The robot's protective_stop state will be updated in the background. This will always show the latest received
+   * state independent of the time that has passed since receiving it.
+   *
+   * \throws UrException when no robot mode data has been received, yet.
+   */
+  bool isRobotProtectiveStopped()
+  {
+    std::shared_ptr<RobotModeData> robot_mode_data = consumer_->getRobotModeData();
+    if (robot_mode_data == nullptr)
+    {
+      throw UrException("Robot mode data is a nullptr. Probably it hasn't been received, yet.");
+    }
+    return robot_mode_data->is_protective_stopped_;
+  }
 
 private:
   /*!
