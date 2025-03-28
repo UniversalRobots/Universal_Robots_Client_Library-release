@@ -31,7 +31,9 @@
 #include <ur_client_library/primary/primary_client.h>
 #include <ur_client_library/primary/robot_message.h>
 #include <ur_client_library/primary/robot_state.h>
-
+#include "ur_client_library/exceptions.h"
+#include <ur_client_library/helpers.h>
+#include <chrono>
 namespace urcl
 {
 namespace primary_interface
@@ -158,6 +160,123 @@ bool PrimaryClient::checkCalibration(const std::string& checksum)
   URCL_LOG_DEBUG("Got calibration information from robot.");
 
   return kin_info->toHash() == checksum;
+}
+
+void PrimaryClient::commandPowerOn(const bool validate, const std::chrono::milliseconds timeout)
+{
+  if (!sendScript("power on"))
+  {
+    throw UrException("Failed to send power on command to robot");
+  }
+
+  if (validate)
+  {
+    try
+    {
+      waitFor([this]() { return getRobotMode() == RobotMode::IDLE; }, timeout);
+    }
+    catch (const TimeoutException& ex)
+    {
+      throw TimeoutException("Robot did not power on within the given timeout", timeout);
+    }
+  }
+}
+
+void PrimaryClient::commandPowerOff(const bool validate, const std::chrono::milliseconds timeout)
+{
+  if (!sendScript("power off"))
+  {
+    throw UrException("Failed to send power off command to robot");
+  }
+  if (validate)
+  {
+    try
+    {
+      waitFor([this]() { return getRobotMode() == RobotMode::POWER_OFF; }, timeout);
+    }
+    catch (const TimeoutException&)
+    {
+      throw TimeoutException("Robot did not power off within the given timeout", timeout);
+    }
+  }
+}
+
+void PrimaryClient::commandBrakeRelease(const bool validate, const std::chrono::milliseconds timeout)
+{
+  if (!sendScript("set robotmode run"))
+  {
+    throw UrException("Failed to send brake release command to robot");
+  }
+  if (validate)
+  {
+    try
+    {
+      waitFor([this]() { return getRobotMode() == RobotMode::RUNNING; }, timeout);
+    }
+    catch (const TimeoutException&)
+    {
+      throw TimeoutException("Robot did not release the brakes within the given timeout", timeout);
+    }
+  }
+}
+
+void PrimaryClient::commandUnlockProtectiveStop(const bool validate, const std::chrono::milliseconds timeout)
+{
+  if (!sendScript("set unlock protective stop"))
+  {
+    throw UrException("Failed to send unlock protective stop command to robot");
+  }
+  if (validate)
+  {
+    try
+    {
+      waitFor([this]() { return consumer_->getRobotModeData()->is_protective_stopped_ == false; }, timeout);
+    }
+    catch (const TimeoutException&)
+    {
+      throw TimeoutException("Robot did not unlock the protective stop within the given timeout", timeout);
+    }
+  }
+}
+
+void PrimaryClient::commandStop(const bool validate, const std::chrono::milliseconds timeout)
+{
+  std::shared_ptr<RobotModeData> robot_mode_data = consumer_->getRobotModeData();
+  if (robot_mode_data == nullptr)
+  {
+    throw UrException("Stopping a program while robot state is unknown. This should not happen");
+  }
+
+  if (!sendScript("stop program"))
+  {
+    throw UrException("Failed to send the command `stop program` to robot");
+  }
+  if (validate)
+  {
+    try
+    {
+      waitFor(
+          [this]() {
+            return !consumer_->getRobotModeData()->is_program_running_ &&
+                   !consumer_->getRobotModeData()->is_program_paused_;
+          },
+          timeout);
+    }
+    catch (const TimeoutException&)
+    {
+      throw TimeoutException("Robot did not stop the program within the given timeout", timeout);
+    }
+  }
+}
+std::shared_ptr<VersionInformation> PrimaryClient::getRobotVersion(bool blocking,
+                                                                   const std::chrono::milliseconds timeout)
+{
+  if (blocking)
+  {
+    waitFor([this]() { return consumer_->getVersionInformation() != nullptr; }, timeout);
+  }
+
+  return consumer_->getVersionInformation();
 }
 
 }  // namespace primary_interface
