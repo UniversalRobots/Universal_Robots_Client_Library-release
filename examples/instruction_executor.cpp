@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
   bool headless_mode = true;
   g_my_robot = std::make_unique<urcl::ExampleRobotWrapper>(robot_ip, OUTPUT_RECIPE, INPUT_RECIPE, headless_mode,
                                                            "external_control.urp");
-  if (!g_my_robot->ur_driver_->checkCalibration(CALIBRATION_CHECKSUM))
+  if (!g_my_robot->getUrDriver()->checkCalibration(CALIBRATION_CHECKSUM))
   {
     URCL_LOG_ERROR("Calibration checksum does not match actual robot.");
     URCL_LOG_ERROR("Use the ur_calibration tool to extract the correct calibration from the robot and pass that into "
@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  auto instruction_executor = std::make_shared<urcl::InstructionExecutor>(g_my_robot->ur_driver_);
+  auto instruction_executor = std::make_shared<urcl::InstructionExecutor>(g_my_robot->getUrDriver());
   // --------------- INITIALIZATION END -------------------
 
   URCL_LOG_INFO("Running motion");
@@ -89,8 +89,8 @@ int main(int argc, char* argv[])
 
     std::make_shared<urcl::control::MoveLPrimitive>(urcl::Pose(-0.203, 0.263, 0.559, 0.68, -1.083, -2.076), 0.1,
                                                     std::chrono::seconds(2)),
-    std::make_shared<urcl::control::MoveLPrimitive>(urcl::Pose{ -0.203, 0.463, 0.559, 0.68, -1.083, -2.076 }, 0.1,
-                                                    std::chrono::seconds(2)),
+    std::make_shared<urcl::control::MovePPrimitive>(urcl::Pose{ -0.203, 0.463, 0.559, 0.68, -1.083, -2.076 }, 0.1, 0.4,
+                                                    0.4),
   };
   instruction_executor->executeMotion(motion_sequence);
 
@@ -105,6 +105,8 @@ int main(int argc, char* argv[])
   // goal time parametrization -- acceleration and velocity will be ignored
   instruction_executor->moveL({ -0.203, 0.463, 0.559, 0.68, -1.083, -2.076 }, 0.1, 0.1, goal_time_sec);
 
-  g_my_robot->ur_driver_->stopControl();
+  instruction_executor->moveP({ -0.203, 0.463, 0.759, 0.68, -1.083, -2.076 }, 1.5, 1.5);
+
+  g_my_robot->getUrDriver()->stopControl();
   return 0;
 }
