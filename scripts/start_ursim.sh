@@ -29,7 +29,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 PERSISTENT_BASE="${HOME}/.ursim"
-URCAP_VERSION="1.0.5"
+URCAP_VERSION="latest"
 IP_ADDRESS="192.168.56.101"
 PORT_FORWARDING_WITH_DASHBOARD="-p 30001-30004:30001-30004 -p 29999:29999"
 PORT_FORWARDING_WITHOUT_DASHBOARD="-p 30001-30004:30001-30004"
@@ -212,8 +212,59 @@ post_setup_e-series()
   post_setup_cb3
 }
 
+get_effective_url()
+{
+  curl -Ls -o /dev/null -w %\{url_effective\} "$1"
+}
+
+get_version_from_release_url()
+{
+  echo "$effective_url" | grep -oP '\d+\.\d+\.\d+' | head -n 1
+}
+
+# Get the latest tag from a GitHub release page. Provide a link to its latest release e.g.
+# https://github.com/UniversalRobots/Universal_Robots_ExternalControl_URCapX/releases/latest
+get_latest_release_tag()
+{
+  effective_url=$(get_effective_url "$1")
+  get_version_from_release_url "$effective_url"
+}
+
+# Get the URCAPX download URL for a given version
+#
+# Specify the desired version or "latest" as the first argument
+# 
+# sets URCAPX_VERSION
+# sets URCAPX_DOWNLOAD_URL
+get_download_url_urcapx()
+{
+  release_url="https://github.com/UniversalRobots/Universal_Robots_ExternalControl_URCapX/releases/$1"
+  URCAPX_VERSION=$(get_latest_release_tag "$release_url")
+  URCAPX_DOWNLOAD_URL="https://github.com/UniversalRobots/Universal_Robots_ExternalControl_URCapX/releases/download/$URCAPX_VERSION/external-control-$URCAPX_VERSION.urcapx"
+}
+
+# Get the URCAPX download URL for a given version
+#
+# Specify the desired version or "latest" as the first argument
+#
+# sets URCAPX_VERSION
+# sets URCAPX_DOWNLOAD_URL
+get_download_url_urcap()
+{
+  release_url="https://github.com/UniversalRobots/Universal_Robots_ExternalControl_URCap/releases/$1"
+  URCAP_VERSION=$(get_latest_release_tag "$release_url")
+  URCAP_DOWNLOAD_URL="https://github.com/UniversalRobots/Universal_Robots_ExternalControl_URCap/releases/download/v$URCAP_VERSION/externalcontrol-$URCAP_VERSION.jar"
+}
+
 post_setup_polyscopex()
 {
+  get_download_url_urcapx latest
+  mkdir -p "${URCAP_STORAGE}"
+  urcapx_file="${URCAP_STORAGE}/external-control-$URCAPX_VERSION.urcapx"
+  if [[ ! -f "$urcapx_file" ]]; then
+    echo "Downloading External Control URCapX version ${URCAPX_VERSION}"
+    curl -L -o "$urcapx_file" "$URCAPX_DOWNLOAD_URL"
+  fi
 
   echo -ne "Starting URSim. Waiting for UrService to be up..."
   curl_cmd="curl --retry-connrefused -f --write-out %{http_code} --silent --output /dev/null $IP_ADDRESS/universal-robots/urservice/api/v1/urcaps"
@@ -228,11 +279,9 @@ post_setup_polyscopex()
 
   echo ""; echo "UrService is up"
 
-  # TODO: Once we have a downloadable URCapX, we can use the following code to install it
-  #urcapx_file="${HOME}/Downloads/external-control-0.1.0.urcapx"
-  #echo "Installing URCapX $urcapx_file"
-  #curl --location --request POST  --silent --output /dev/null "$IP_ADDRESS/universal-robots/urservice/api/v1/urcaps" --form urcapxFile=@"${urcapx_file}"
-  #echo "";
+  echo "Installing URCapX $urcapx_file"
+  curl --location --request POST  --silent --output /dev/null "$IP_ADDRESS/universal-robots/urservice/api/v1/urcaps" --form urcapxFile=@"${urcapx_file}"
+  echo "";
 
   echo -e "\nTo access PolyScopeX, open the following URL in a web browser."
   printf "\n\n\thttp://%s\n\n" "$IP_ADDRESS"
@@ -274,7 +323,7 @@ parse_arguments(){
       \?) # invalid option
         echo "Error: Invalid option"
         help
-        exit;;
+        exit 1
     esac
   done
 }
@@ -377,9 +426,10 @@ main() {
     PROGRAM_STORAGE=$(realpath "$PROGRAM_STORAGE")
 
     # Download external_control URCap
+    get_download_url_urcap $URCAP_VERSION
     if [[ ! -f "${URCAP_STORAGE}/externalcontrol-${URCAP_VERSION}.jar" ]]; then
-      curl -L -o "${URCAP_STORAGE}/externalcontrol-${URCAP_VERSION}.jar" \
-        "https://github.com/UniversalRobots/Universal_Robots_ExternalControl_URCap/releases/download/v${URCAP_VERSION}/externalcontrol-${URCAP_VERSION}.jar"
+      echo "Downloading and installing External Control URCap version ${URCAP_VERSION}"
+      curl -L -o "${URCAP_STORAGE}/externalcontrol-${URCAP_VERSION}.jar" "$URCAP_DOWNLOAD_URL"
     fi
     docker_cmd="docker run --rm -d --net ursim_net --ip $IP_ADDRESS\
       -v ${URCAP_STORAGE}:/urcaps \
@@ -392,7 +442,7 @@ main() {
 
   if [ "$TEST_RUN" = true ]; then
     echo "$docker_cmd" | tr -s ' '
-    exit
+    exit 0
   fi
   $docker_cmd || exit 2
 

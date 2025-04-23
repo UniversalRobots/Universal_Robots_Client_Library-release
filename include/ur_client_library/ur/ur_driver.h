@@ -30,6 +30,7 @@
 
 #include <chrono>
 #include <functional>
+#include <memory>
 
 #include "ur_client_library/rtde/rtde_client.h"
 #include "ur_client_library/control/reverse_interface.h"
@@ -125,12 +126,12 @@ struct UrDriverConfiguration
    *
    * If set to 0, the driver will try to initialize the RTDE interface indefinitely.
    */
-  size_t rtde_initialization_attempts_ = 3;
+  size_t rtde_initialization_attempts = 3;
 
   /*!
    * \brief Time in between initialization attempts of the RTDE interface.
    */
-  std::chrono::milliseconds rtde_initialization_timeout_ = std::chrono::seconds(5);
+  std::chrono::milliseconds rtde_initialization_timeout = std::chrono::seconds(5);
 
   bool non_blocking_read = false;
 
@@ -530,6 +531,18 @@ public:
    * \returns True on successful write.
    */
   bool writeTrajectorySplinePoint(const vector6d_t& positions, const float goal_time = 0.0);
+
+  /*!
+   * \brief Writes a motion command to the trajectory point interface
+   *
+   * The motion command corresponds directly to a URScript move function such as `movej` or
+   * `movel`. See the MotionPrimitive's header for all possible motion primitives.
+   *
+   * \param motion_instruction The motion primitive to be sent to the robot.
+   *
+   * \returns True on successful write.
+   */
+  bool writeMotionPrimitive(const std::shared_ptr<control::MotionPrimitive> motion_instruction);
 
   /*!
    * \brief Writes a control message in trajectory forward mode.
