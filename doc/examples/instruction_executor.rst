@@ -21,7 +21,7 @@ The `instruction_executor.cpp <https://github.com/UniversalRobots/Universal_Robo
    :linenos:
    :lineno-match:
    :start-at: bool headless_mode = true;
-   :end-at: auto instruction_executor = std::make_shared<urcl::InstructionExecutor>(g_my_robot->ur_driver_);
+   :end-at: auto instruction_executor = std::make_shared<urcl::InstructionExecutor>(g_my_robot->getUrDriver());
 
 At first, a ``InstructionExecutor`` object is created with the URDriver object as it needs that
 for communication with the robot.
@@ -44,10 +44,12 @@ To run a sequence of motions, create an
    :end-at: instruction_executor->executeMotion(motion_sequence);
 
 Each element in the motion sequence can be a different motion type. In the example, there are two
-``MoveJ`` motions and two ``MoveL`` motion. The primitives' parameters are directly forwarded to
+``MoveJ`` motions, a ``MoveL`` motion and a ``MoveP`` motion. The primitives' parameters are directly forwarded to
 the underlying script functions, so the parameter descriptions for them apply, as well.
 Particularly, you may want to choose between either a time-based execution speed or an acceleration
-/ velocity parametrization. The latter will be ignored if a time > 0 is given.
+/ velocity parametrization for some move functions. The latter will be ignored if a time > 0 is given.
+
+Please refer to the script manual for details.
 
 Execute a single motion
 -----------------------
@@ -61,6 +63,6 @@ To run a single motion, the ``InstructionExecutor`` provides the methods ``moveJ
    :linenos:
    :lineno-match:
    :start-at: double goal_time_sec = 2.0;
-   :end-before: g_my_robot->ur_driver_->stopControl();
+   :end-before: g_my_robot->getUrDriver()->stopControl();
 
 Again, time parametrization has priority over acceleration / velocity parameters.
